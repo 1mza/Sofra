@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor('Client')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Client::class)->constrained()->cascadeOnDelete();
             $table->string('token');
             $table->enum('type', ['ios', 'android'])->default('active');
             $table->timestamps();

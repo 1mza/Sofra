@@ -30,7 +30,10 @@ class AuthController extends Controller
             $client = Client::create($attributes);
             $client->api_token = Str::random(60);
             $client->save();
-            return responseJson(1, "Client Created Successfully.", $client);
+            return responseJson(1, "Client Created Successfully.", [
+                'Api Token'=> $client->api_token,
+                'Client'=> $client
+            ]);
         } catch (ValidationException $e) {
             return responseJson(0, $e->getMessage(), $e->errors());
         }
@@ -48,7 +51,10 @@ class AuthController extends Controller
                 if (Hash::check(request('password'), $client->password)) {
                     $client->api_token = Str::random(60);
                     $client->save();
-                    return responseJson(1, "Client Login Successfully.", $client);
+                    return responseJson(1, "Client Login Successfully.", [
+                        'Api Token'=> $client->api_token,
+                        'Client'=> $client
+                    ]);
                 } else {
                     return responseJson(0, "Password is incorrect.");
                 }

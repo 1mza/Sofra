@@ -35,13 +35,15 @@ class AuthController extends Controller
                 'category_id,*' => [Rule::exists('categories', 'id')],
             ]);
             $attributes['password'] = bcrypt($attributes['password']);
-            $imagePath = $attributes['image']->store('sellers');
-            $attributes['image'] = $imagePath;
+            $attributes['image'] = $attributes['image']->store('sellers');
             $seller = Seller::create($attributes);
             $seller->api_token = Str::random(60);
             $seller->save();
             $seller->categories()->attach($categories['category_id']);
-            return responseJson(1, "Seller Created Successfully.", $seller);
+            return responseJson(1, "Seller Created Successfully.", [
+                'Api Token'=> $seller->api_token,
+                'Seller'=> $seller
+            ]);
         } catch (ValidationException $e) {
             return responseJson(0, $e->getMessage(), $e->errors());
         }
@@ -59,7 +61,10 @@ class AuthController extends Controller
                 if (Hash::check(request('password'), $seller->password)) {
                     $seller->api_token = Str::random(60);
                     $seller->save();
-                    return responseJson(1, "Seller Login Successfully.", $seller);
+                    return responseJson(1, "Seller Login Successfully.", [
+                        'Api Token'=> $seller->api_token,
+                        'Seller'=> $seller
+                    ]);
                 } else {
                     return responseJson(0, "Password is incorrect.");
                 }
