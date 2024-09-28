@@ -14,12 +14,20 @@ class Client extends Model
 
     protected $guarded = [];
 
+    protected $hidden = ['password', 'api_token', 'pin_code', 'pin_code_expires_at'];
+
+
     public function token() : HasOne{
         return $this->hasOne(Token::class);
     }
 
     public function orders() : hasMany{
         return $this->hasMany(Order::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Commission;
+use App\Models\SettingsText;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -87,6 +88,12 @@ class SellerController extends Controller
             'remaining amount' => $commission->remaining_amount ?? $seller->app_commissions
         ]);
     }
+
+    public function commissionText(){
+        $aboutApp = SettingsText::select('commission_text')->first();
+        return responseJson(1, "About App", $aboutApp);
+    }
+
 
 
 }

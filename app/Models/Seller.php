@@ -12,6 +12,8 @@ class Seller extends Model
 {
     use HasFactory;
 
+    protected $hidden = ['password', 'api_token', 'pin_code', 'pin_code_expires_at'];
+
     protected $guarded = [];
 
     public function categories() :BelongsToMany{
@@ -26,12 +28,21 @@ class Seller extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function orders() : hasMany{
+        return $this->hasMany(Order::class);
+    }
+
     public function offers() :HasMany{
         return $this->hasMany(Offer::class);
     }
 
     public function commissions() :HasMany{
         return $this->hasMany(Commission::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 
 
