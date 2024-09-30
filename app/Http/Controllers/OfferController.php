@@ -2,21 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
+use App\Models\Offer;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CityController extends Controller
+class OfferController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cities = City::when(request()->has('search'),function ($query){
-            $query->where('name','like','%'.request('search').'%');
-        })->simplePaginate(10);
-        return view('admin-panel.cities.index', compact('cities'));
+        $offers = Offer::when(request()->has('search'), function ($query) {
+            $filteredColumns = ['name', 'brief_description', 'start_date', 'end_date'];
+            $query->where(function ($query) use ($filteredColumns) {
+                foreach ($filteredColumns as $column) {
+                    $query->orWhere($column, 'LIKE', '%' . request('search') . '%');
+                }
+            })->orWhereHas('seller', function ($query) {
+                $query->where('restaurant_name', 'LIKE', '%' . request('search') . '%');
+            });
+        })->latest()->simplePaginate(10);
+        return view('admin-panel.offers.index', compact('offers'));
     }
 
     /**
@@ -24,7 +32,8 @@ class CityController extends Controller
      */
     public function create()
     {
-        return view('admin-panel.cities.create');
+        $sellers = Seller::all();
+        return view('admin-panel.offers.create', compact('sellers'));
     }
 
     /**
@@ -33,47 +42,57 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $attributes = request()->validate([
-            'name' => ['required','string','max:255',Rule::unique('cities','name')],
+            'seller_id' => ['required', Rule::exists('sellers', 'id')],
+            'name' => ['required', 'string'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'brief_description' => ['required', 'string'],
+            'start_date' => ['required', 'date', 'after:yesterday'],
+            'end_date' => ['required', 'date', 'after:start_date'],
         ]);
-        $city = City::create($attributes);
-        return redirect()->route('cities.show',compact('city'))->with('success',$attributes['name']." City created successfully");
+        $attributes['image'] = $attributes['image']->store('offers');
+        $offer = Offer::create($attributes);
+        return redirect()->route('offers.index')->with('success', "Offer for " . $offer->seller->restaurant_name . " created successfully");
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(City $city)
-    {
-        return view('admin-panel.cities.show',compact('city'));
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(City $city)
+    public function edit(Offer $offer)
     {
-        return view('admin-panel.cities.edit',compact('city'));
+        $sellers = Seller::all();
+        return view('admin-panel.offers.edit', compact(['offer','sellers']));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, City $city)
+    public function update(Request $request, Offer $offer)
     {
         $attributes = request()->validate([
-            'name' => ['required','string','max:255',Rule::unique('cities','name')->ignore($city->id)],
+            'seller_id' => ['sometimes', Rule::exists('sellers', 'id')],
+            'name' => ['sometimes', 'string'],
+            'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'brief_description' => ['sometimes', 'string'],
+            'start_date' => ['sometimes', 'date', 'after:yesterday'],
+            'end_date' => ['sometimes', 'date', 'after_or_equal::start_date'],
         ]);
-        $city->update($attributes);
-        return redirect()->route('cities.show')->with('success',$attributes['name']." City updated successfully");
+        if (request()->hasFile('image')) {
+            $attributes['image'] = $attributes['image']->store('offers');
+        }else{
+            $attributes['image'] = $offer->image;
+        }
+        $offer->update($attributes);
+        return redirect()->route('offers.index')->with('success', "Offer for " . $offer->seller->restaurant_name . " updated successfully");
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(City $city)
+    public function destroy(Offer $offer)
     {
-        $city->delete();
-        return redirect()->route('cities.index')->with('success',$city->name." City deleted successfully");
+        $offer->delete();
+        return redirect()->route('offers.index')->with('success', "Offer for " . $offer->seller->restaurant_name . " deleted successfully");
     }
 }

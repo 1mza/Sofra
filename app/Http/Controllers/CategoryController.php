@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\City;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CityController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cities = City::when(request()->has('search'),function ($query){
+        $categories = Category::when(request()->has('search'),function ($query){
             $query->where('name','like','%'.request('search').'%');
-        })->simplePaginate(10);
-        return view('admin-panel.cities.index', compact('cities'));
+        })->latest()->simplePaginate(10);
+        return view('admin-panel.categories.index', compact('categories'));
     }
 
     /**
@@ -24,7 +25,7 @@ class CityController extends Controller
      */
     public function create()
     {
-        return view('admin-panel.cities.create');
+        return view('admin-panel.categories.create');
     }
 
     /**
@@ -33,47 +34,47 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $attributes = request()->validate([
-            'name' => ['required','string','max:255',Rule::unique('cities','name')],
+            'name' => ['required','string','max:255',Rule::unique('categories','name')],
         ]);
-        $city = City::create($attributes);
-        return redirect()->route('cities.show',compact('city'))->with('success',$attributes['name']." City created successfully");
+        $category = Category::create($attributes);
+        return redirect()->route('categories.show',compact('category'))->with('success',$attributes['name']." Category created successfully");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(City $city)
+    public function show(Category $category)
     {
-        return view('admin-panel.cities.show',compact('city'));
+        return view('admin-panel.categories.show',compact('category'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(City $city)
+    public function edit(Category $category)
     {
-        return view('admin-panel.cities.edit',compact('city'));
+        return view('admin-panel.categories.edit',compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, City $city)
+    public function update(Request $request, Category $category)
     {
         $attributes = request()->validate([
-            'name' => ['required','string','max:255',Rule::unique('cities','name')->ignore($city->id)],
+            'name' => ['required','string','max:255',Rule::unique('Categories','name')->ignore($category->id)],
         ]);
-        $city->update($attributes);
-        return redirect()->route('cities.show',compact('city'))->with('success',$attributes['name']." City updated successfully");
+        $category->update($attributes);
+        return redirect()->route('categories.show',compact('category'))->with('success',$attributes['name']." Category updated successfully");
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(City $city)
+    public function destroy(Category $category)
     {
-        $city->delete();
-        return redirect()->route('cities.index')->with('success',$city->name." City deleted successfully");
+        $category->delete();
+        return redirect()->route('categories.index')->with('success',$category->name." Category deleted successfully");
     }
 }

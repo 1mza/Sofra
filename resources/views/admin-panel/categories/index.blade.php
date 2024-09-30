@@ -3,12 +3,12 @@
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/categories')}}">Categories</a></li>
         </ol>
     </div>
 @endsection
 @section('page_title')
-    Cities
+    Categories
 @endsection
 
 @section('small_title')
@@ -20,8 +20,8 @@
         <div class="info-box">
             <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Cities</span>
-                <span class="info-box-number">{{$cities->count()}}</span>
+                <span class="info-box-text">Categories</span>
+                <span class="info-box-number">{{$categories->count()}}</span>
             </div>
         </div>
     </div>
@@ -31,11 +31,11 @@
             <div class="card-header d-flex justify-content-between align-items-center col-12">
                 <!-- Title -->
                 <h3 class="card-title mb-0 col-4">
-                    List of Cities
+                    List of Categories
                 </h3>
 
                 <!-- Search Form -->
-                <x-forms.form class=" col-4 d-flex align-items-center" action="{{route('cities.index')}}">
+                <x-forms.form class=" col-4 d-flex align-items-center" action="{{route('categories.index')}}">
                     <div class="input-group">
                         <input class="form-control border rounded-start" value="{{request('search')}}" type="text"
                                name="search" placeholder="Search for a city...">
@@ -44,8 +44,8 @@
                 </x-forms.form>
                 {{--                @can('cities-create')--}}
                 <div class="col-4 text-end">
-                    <a href="{{route('cities.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New City
+                    <a href="{{route('categories.create')}}" class="ml-auto btn btn-primary ms-3">
+                        Add New Category
                     </a>
                 </div>
                 {{--                @endcan--}}
@@ -53,6 +53,10 @@
             {{--            @include('flash::message')--}}
             @if (session('success'))
                 <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @elseif(session('danger'))
+                <div class="alert alert-danger">
                     {{ session('success') }}
                 </div>
             @endif
@@ -68,18 +72,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($cities as $city)
+                        @foreach($categories as $category)
                             <tr>
                                 <th>{{$loop->iteration}}</th>
                                 <td><a class="row-link"
-                                       href="{{route('cities.show',$city)}}">{{$city->name}}</a></td>
+                                       href="{{route('categories.show',$category)}}">{{$category->name}}</a></td>
                                 <td>
                                     {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('cities.edit',$city)}}"
+                                    <a href="{{route('categories.edit',$category)}}"
                                        class="btn btn-warning">Edit</a>
                                     {{--                                        @endcan--}}
                                     {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('cities.destroy',$city)}}" method="post"
+                                    <form action="{{route('categories.destroy',$category)}}" method="post"
                                           style="display:inline;">
                                         @csrf
                                         @method('DELETE')
@@ -94,7 +98,7 @@
                         </tbody>
                     </table>
                     {{--                    @endcan--}}
-                    {{$cities->links()}}
+                    {{$categories->links()}}
                 </div>
             </div>
         </div>

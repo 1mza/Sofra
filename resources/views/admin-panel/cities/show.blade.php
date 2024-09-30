@@ -1,11 +1,9 @@
-@extends('layouts.appAdmin')
-{{--@inject('clients','App\Models\Client')--}}
-{{--@inject('donationRequests','App\Models\DonationRequest')--}}
+@extends('layouts.admin-app')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{url('homeAdmin')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('cities')}}">Cities</a></li>
+            <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
             <li class="breadcrumb-item active"><a href="{{route('cities.show',$city->id)}}">{{$city->name}}</a></li>
 
         </ol>
@@ -36,27 +34,31 @@
 
         </div>
         <div class="card-body">
-            @include('flash::message')
-
+            {{--            @include('flash::message')--}}
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{session('success')}}
+                </div>
+            @elseif(session('danger'))
+                <div class="alert alert-danger">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Governorate ID</th>
-                        <th scope="col">Governorate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th scope="row">{{$city->id}}</th>
-                        <td>{{$city->name}}</td>
-                        <td>{{$city->governorate_id}}</td>
-                        <td>{{$city->governorate->name}}</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <thead>
+                <tr>
+                    <th scope="col">#ID</th>
+                    <th scope="col">Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">{{$city->id}}</th>
+                    <td>{{$city->name}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <!-- /.card-body -->
     </div>

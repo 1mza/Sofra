@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Neighbourhood;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CityController extends Controller
+class NeighbourhoodController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cities = City::when(request()->has('search'),function ($query){
-            $query->where('name','like','%'.request('search').'%');
-        })->simplePaginate(10);
-        return view('admin-panel.cities.index', compact('cities'));
+        $neighbourhoods = Neighbourhood::when(request()->has('search'),function ($query){
+            $query->where('name','like','%'.request('search').'%')
+            ->orWhereHas('city',function ($query){
+                $query->where('name','like','%'.request('search').'%');
+            });
+        })->latest()->with('city')->simplePaginate(10);
+        return view('admin-panel.neighbourhoods.index', compact('neighbourhoods'));
     }
 
     /**
@@ -24,7 +28,8 @@ class CityController extends Controller
      */
     public function create()
     {
-        return view('admin-panel.cities.create');
+        $cities = City::all();
+        return view('admin-panel.neighbourhoods.create',compact('cities'));
     }
 
     /**
@@ -33,47 +38,50 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $attributes = request()->validate([
+            'city_id' => ['required',Rule::exists('cities','id')],
             'name' => ['required','string','max:255',Rule::unique('cities','name')],
         ]);
-        $city = City::create($attributes);
-        return redirect()->route('cities.show',compact('city'))->with('success',$attributes['name']." City created successfully");
+        $neighbourhood = Neighbourhood::create($attributes);
+        return redirect()->route('neighbourhoods.show',compact('neighbourhood'))->with('success',$attributes['name']." Neighbourhood created successfully");
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(City $city)
+    public function show(Neighbourhood $neighbourhood)
     {
-        return view('admin-panel.cities.show',compact('city'));
+        return view('admin-panel.neighbourhoods.show',compact('neighbourhood'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(City $city)
+    public function edit(Neighbourhood $neighbourhood)
     {
-        return view('admin-panel.cities.edit',compact('city'));
+        $cities = City::all();
+        return view('admin-panel.neighbourhoods.edit',compact('neighbourhood','cities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, City $city)
+    public function update(Request $request, Neighbourhood $neighbourhood)
     {
         $attributes = request()->validate([
-            'name' => ['required','string','max:255',Rule::unique('cities','name')->ignore($city->id)],
+            'city_id' => ['required',Rule::exists('cities','id')],
+            'name' => ['required','string','max:255',Rule::unique('cities','name')->ignore($neighbourhood->id)],
         ]);
-        $city->update($attributes);
-        return redirect()->route('cities.show',compact('city'))->with('success',$attributes['name']." City updated successfully");
+        $neighbourhood->update($attributes);
+        return redirect()->route('neighbourhoods.show',compact('neighbourhood'))->with('success',$attributes['name']." Neighbourhood updated successfully");
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(City $city)
+    public function destroy(Neighbourhood $neighbourhood)
     {
-        $city->delete();
-        return redirect()->route('cities.index')->with('success',$city->name." City deleted successfully");
+        $neighbourhood->delete();
+        return redirect()->route('neighbourhoods.index')->with('success',$neighbourhood->name." Neighbourhood deleted successfully");
     }
 }

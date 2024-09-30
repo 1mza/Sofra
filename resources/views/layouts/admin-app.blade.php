@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Blood Bank</title>
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <title>Sofra admin panel</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
@@ -49,10 +49,10 @@
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{url('admin/homeAdmin')}}" class="nav-link">Home</a>
+                <a href="{{url('admin-panel/home')}}" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{url('admin/contact-us')}}" class="nav-link">Contact US</a>
+                <a href="{{url('admin-panel/contact-us')}}" class="nav-link">Contact US</a>
             </li>
         </ul>
 
@@ -85,14 +85,14 @@
                     <i class="fas fa-expand-arrows-alt"></i>
                 </a>
             </li>
-            <li class="nav-item">
-                <form action="{{route('logout')}}" method="POST">
-                    @csrf
-                    <button class="nav-link" data-widget="logout" role="button">
-                        <i class="">Logout</i>
-                    </button>
-                </form>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--                <form action="{{route('logout')}}" method="POST">--}}
+{{--                    @csrf--}}
+{{--                    <button class="nav-link" data-widget="logout" role="button">--}}
+{{--                        <i class="">Logout</i>--}}
+{{--                    </button>--}}
+{{--                </form>--}}
+{{--            </li>--}}
 
         </ul>
     </nav>
@@ -116,10 +116,10 @@
                          alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{auth()->user()->name}}</a>
-                    @foreach(auth()->user()->roles->pluck('name') as $role)
-                        <label class="badge badge-light mx-1">{{$role}}</label>
-                    @endforeach
+                    <a href="profile" class="d-block">{{auth()->user()->name}}</a>
+{{--                    @foreach(auth()->user()->roles->pluck('name') as $role)--}}
+{{--                        <label class="badge badge-light mx-1">{{$role}}</label>--}}
+{{--                    @endforeach--}}
                 </div>
             </div>
 
@@ -147,7 +147,7 @@
                         </div>
                     </li>
                     <li class=" nav-item">
-                        <a href="#" class="{{request()->is('admin/posts') || request()->is('admin/categories') ? 'bg-gray-900 text-white' : null}} nav-link">
+                        <a href="#" class="{{request()->is('admin-panel/posts') || request()->is('admin-panel/categories') ? 'bg-gray-900 text-white' : null}} nav-link">
                             <i class="  nav-icon fa fa-table"></i>
                             <p>
                                 Posts
@@ -155,15 +155,15 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="{{request()->is('admin/posts') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin/posts')}}" class="nav-link">
+                            <li class="{{request()->is('admin-panel/posts') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-panel/posts')}}" class="nav-link">
                                     <i class="far fa-clipboard nav-icon"></i>
                                     <p>Posts</p>
                                 </a>
                             </li>
                             <li>
                             <li class="{{request()->is('categories') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin/categories')}}" class="nav-link">
+                                <a href="{{url('admin-panel/categories')}}" class="nav-link">
                                     <i class="nav-icon fa fa-list-alt"></i>
                                     <p>Categories</p>
                                 </a>
@@ -172,72 +172,85 @@
                     </li>
 
                     <li>
-                    <li class="{{request()->is('admin/governorates') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/governorates')}}" class="nav-link">
-                            <i class="nav-icon fa fa-city"></i>
-                            <p>Governorates</p>
-                        </a>
-                    </li>
+
                     <li>
-                    <li class="{{request()->is('admin/cities') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/cities')}}" class="nav-link">
-                            <i class="nav-icon fa fa-map-marker"></i>
+                    <li class="{{request()->is('admin-panel/cities') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/cities')}}" class="nav-link">
+                            <i class="nav-icon fa fa-city"></i>
                             <p>Cities</p>
                         </a>
                     </li>
-                    <li>
-                    <li class="{{request()->is('admin/donation-requests') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/donation-requests')}}" class="nav-link">
-                            <i class="nav-icon fa fa-paper-plane"></i>
-                            <p>Donation Requests</p>
+                    <li class="{{request()->is('admin-panel/neighbourhoods') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/neighbourhoods')}}" class="nav-link">
+                            <i class="nav-icon fa fa-map-marker"></i>
+                            <p>Neighbourhoods</p>
                         </a>
                     </li>
-                    <li class="{{request()->is('admin/clients') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/clients')}}" class="nav-link">
-                            <i class="nav-icon fa fa-server"></i>
-                            <p>Clients</p>
+                    <li class="{{request()->is('admin-panel/categories') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/categories')}}" class="nav-link">
+                            <i class="nav-icon fa fa-list-alt"></i>
+                            <p>Categories</p>
                         </a>
                     </li>
+                    <li class="{{request()->is('admin-panel/offers') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/offers')}}" class="nav-link">
+                            <i class="nav-icon fa fa-list-alt"></i>
+                            <p>Offers</p>
+                        </a>
+                    </li>
+                    <li class="{{request()->is('admin-panel/commissions') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/commissions')}}" class="nav-link">
+                            <i class="nav-icon 	fa fa-credit-card"></i>
+                            <p>Commissions</p>
+                        </a>
+                    </li>
+
 
 
                     <li class="nav-item">
-                        <a href="#" class="{{request()->is('admin/users') || request()->is('admin/roles') || request()->is('admin/permissions') ? 'bg-gray-900 text-white' : null}} nav-link">
+                        <a href="#" class="{{request()->is('admin-panel/users') || request()->is('admin-panel/roles') || request()->is('admin-panel/permissions') ? 'bg-gray-900 text-white' : null}} nav-link">
                             <i class="nav-icon fa fa-list"></i>
                             <p>Users</p>
                             <i class="right fas fa-angle-left"></i>
                         </a>
                         <ul class="nav nav-treeview">
 
-                            <li class="{{request()->is('admin/users') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin/users')}}" class="nav-link">
+                            <li class="{{request()->is('admin-panel/users') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-anel/users')}}" class="nav-link">
                                     <i class="nav-icon fa fa-users "></i>
                                     <p>Users Informations</p>
                                 </a>
                             </li>
-                            <li class="{{request()->is('admin/roles') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin/roles')}}" class="nav-link">
+                            <li class="{{request()->is('admin-panel/roles') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-anel/roles')}}" class="nav-link">
                                     <i class="nav-icon far fa-user "></i>
                                     <p>Roles</p>
                                 </a>
                             </li>
-                            <li class="{{request()->is('admin/permissions') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin/permissions')}}" class="nav-link">
+                            <li class="{{request()->is('admin-panel/permissions') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-panel/permissions')}}" class="nav-link">
                                     <i class=" nav-icon far fa-address-book"></i>
                                     <p>Permissions</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
-                    <li class="{{request()->is('admin/contacts') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/contacts')}}" class="nav-link">
+                    <li class="{{request()->is('admin-panel/contacts') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-anel/contacts')}}" class="nav-link">
                             <i class="nav-icon fas fa-envelope"></i>
                             <p>Contacts</p>
                         </a>
                     </li>
-                    <li class="{{request()->is('admin/contact-us') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/contact-us')}}" class="nav-link">
+                    <li class="{{request()->is('admin-panel/contact-us') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-anel/contact-us')}}" class="nav-link">
                             <i class="nav-icon fas fa-phone"></i>
                             <p>Contact Us</p>
+                        </a>
+                    </li>
+                    <li class="{{request()->is('admin-panel/profile') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{route('profile.edit')}}" class="nav-link">
+                            <i class="nav-icon fa fa-user"></i>
+                            <p>Profile</p>
                         </a>
                     </li>
                     <li class="{{request()->is('admin/settings') ? 'bg-gray-900 text-white' : null}}nav-item">
@@ -246,6 +259,16 @@
                             <p>Settings</p>
                         </a>
                     </li>
+                    <li class="{{request()->is('/logout') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <form method="POST" id="logout" action="{{ route('logout') }}">
+                            @csrf
+                            <a onclick="document.getElementById('logout').submit()" class="nav-link">
+                                <i class="nav-icon fa fa-sign-out-alt"></i>
+                                <p>Logout</p>
+                            </a>
+                        </form>
+                    </li>
+
 
                 </ul>
             </nav>

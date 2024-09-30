@@ -56,7 +56,7 @@ class SellerController extends Controller
     {
         try {
             $attributes = request()->validate([
-                'amount_paid' => ['required', 'integer', 'gt:0'],
+                'amount_paid' => ['required', 'numeric', 'gt:0'],
                 'note' => ['sometimes', 'string'],
             ]);
             $seller = auth()->user();

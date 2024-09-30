@@ -1,16 +1,15 @@
 @extends('layouts.admin-app')
-@inject('cities','App\Models\City')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
-            <li class="breadcrumb-item active"><a href="{{route('cities.show',$city->id)}}">{{$city->name}}</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/neighbourhoods')}}">Neighbourhoods</a></li>
+            <li class="breadcrumb-item active"><a href="{{route('neighbourhoods.show',$neighbourhood->id)}}">{{$neighbourhood->name}}</a></li>
         </ol>
     </div>
 @endsection
 @section('page_title')
-    Edit cities page
+    Edit neighbourhoods page
 @endsection
 
 @section('small_title')
@@ -20,8 +19,8 @@
         <div class="info-box">
             <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">City</span>
-                <span class="info-box-number">{{$city->name}}</span>
+                <span class="info-box-text">Neighbourhood</span>
+                <span class="info-box-number">{{$neighbourhood->name}}</span>
             </div>
         </div>
     </div>
@@ -34,11 +33,17 @@
 
         </div>
         <div class="card-body">
-            <x-forms.form class="d-flex flex-column" method="post" action="{{route('cities.update',$city)}}">
+            <x-forms.form class="d-flex flex-column" method="post" action="{{route('neighbourhoods.update',$neighbourhood)}}">
                 @csrf
                 @method('PATCH')
-                <x-forms.input label="City" value="{{$city->name}}"  type="text" name="name"
-                               placeholder="Enter city name..." />
+                <x-forms.select name="city_id" label="City">
+                    <option>Select City</option>
+                    @foreach($cities as $city)
+                        <option {{$city == $neighbourhood->city ? 'selected' : ''}} value="{{$city->id}}">{{$city->name}}</option>
+                    @endforeach
+                </x-forms.select>
+                <x-forms.input label="Neighbourhood" value="{{$neighbourhood->name}}"  type="text" name="name"
+                               placeholder="Enter Neighbourhood name..." />
                 <x-forms.button class="align-items-center mt-3">Create</x-forms.button>
             </x-forms.form>
         </div>

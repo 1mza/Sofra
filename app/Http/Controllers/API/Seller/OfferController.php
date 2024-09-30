@@ -29,8 +29,8 @@ class OfferController extends Controller
                     'name' => ['required', 'string'],
                     'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
                     'brief_description' => ['required', 'string'],
-                    'start_date' => ['required', 'date', 'date_format:Y-m-d', 'after:yesterday'],
-                    'end_date' => ['required', 'date', 'after:start_date'],
+                    'start_date' => ['required', 'date', 'after:yesterday'],
+                    'end_date' => ['required', 'date', 'after_or_equal:start_date'],
                 ]);
                 $attributes['image'] = $attributes['image']->store('offers');
                 $seller = auth()->user();
@@ -52,9 +52,8 @@ class OfferController extends Controller
                     'name' => ['sometimes', 'string'],
                     'image' => ['sometimes', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
                     'brief_description' => ['sometimes', 'string'],
-                    'price' => ['sometimes', 'integer'],
-                    'offer_price' => ['sometimes', 'integer'],
-                    'preparation_time' => ['sometimes', 'integer'],
+                    'start_date' => ['sometimes', 'date', 'after:yesterday'],
+                    'end_date' => ['sometimes', 'date', 'after_or_equal:start_date'],
                 ]);
                 if (request()->hasFile('image')) {
                     $attributes['image'] = $attributes['image']->store('offers');

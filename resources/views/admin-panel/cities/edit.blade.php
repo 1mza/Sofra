@@ -1,14 +1,11 @@
-@extends('layouts.appAdmin')
-{{--@inject('clients','App\Models\Client')--}}
+@extends('layouts.admin-app')
 @inject('cities','App\Models\City')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{url('homeAdmin')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('cities')}}">Cities</a></li>
+            <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
             <li class="breadcrumb-item active"><a href="{{route('cities.show',$city->id)}}">{{$city->name}}</a></li>
-            @dd($donationRequest->id);
-
         </ol>
     </div>
 @endsection
@@ -37,11 +34,13 @@
 
         </div>
         <div class="card-body">
-
-            {{html()->modelForm($cities,'PUT')->class('form')->route('cities.update',$city->id)->open()}}
-            @include('partials.validation_errors')
-            @include('cities.form')
-            {{html()->closeModelForm()}}
+            <x-forms.form class="d-flex flex-column" method="post" action="{{route('cities.update',$city)}}">
+                @csrf
+                @method('PATCH')
+                <x-forms.input label="City" value="{{$city->name}}"  type="text" name="name"
+                               placeholder="Enter city name..." />
+                <x-forms.button class="align-items-center mt-3">Create</x-forms.button>
+            </x-forms.form>
         </div>
         <!-- /.card-body -->
     </div>

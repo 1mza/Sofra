@@ -1,10 +1,10 @@
-@extends('layouts.appAdmin')
+@extends('layouts.admin-app')
 @inject('cities','App\Models\City')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{url('homeAdmin')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('Cities')}}">Cities</a></li>
+            <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
             <li class="breadcrumb-item active"><a href="{{route('cities.create')}}">Create</a></li>
 
         </ol>
@@ -35,34 +35,13 @@
 
         </div>
         <div class="card-body">
-            {{html()->modelForm($cities,'POST')->class('form')->route('cities.store')->open()}}
-            @include('partials.validation_errors')
-            @include('cities.form')
-            {{html()->closeModelForm()}}
-
-            {{--            <form action="{{route('governorates.store')}}" method="post">--}}
-{{--                @csrf--}}
-{{--                @method('POST')--}}
-{{--                <table class="table">--}}
-{{--                    <thead>--}}
-{{--                    <tr>--}}
-{{--                        <th scope="col">Name</th>--}}
-{{--                        <th scope="col">Action</th>--}}
-{{--                    </tr>--}}
-{{--                    </thead>--}}
-{{--                    <tbody>--}}
-{{--                    <tr>--}}
-{{--                        <td>--}}
-{{--                            <input  type="text" name="name" placeholder="إسم المحافظة" class="form-control">--}}
-{{--                        </td>--}}
-{{--                        <td>--}}
-{{--                            <button class="btn btn-success">Create</button>--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                    </tbody>--}}
-{{--                </table>--}}
-{{--            </form>--}}
-
+            <x-forms.form class="d-flex flex-column" method="post" action="{{route('cities.store')}}">
+                @csrf
+                @method('POST')
+                <x-forms.input label="City"  type="text" name="name"
+                               placeholder="Enter city name..." />
+                <x-forms.button class="align-items-center mt-3">Create</x-forms.button>
+            </x-forms.form>
         </div>
         <!-- /.card-body -->
     </div>

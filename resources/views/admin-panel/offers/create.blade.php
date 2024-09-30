@@ -1,31 +1,31 @@
 @extends('layouts.admin-app')
-@inject('cities','App\Models\City')
+@inject('offers','App\Models\Offer')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
-            <li class="breadcrumb-item active"><a href="{{route('cities.create')}}">Create</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/offers')}}">Offers</a></li>
+            <li class="breadcrumb-item active"><a href="{{route('offers.create')}}">Create</a></li>
 
         </ol>
     </div>
 @endsection
 @section('page_title')
-    Create cities page
+    <div class="w-75">
+        <div class="info-box">
+            <span class="info-box-icon w-25 bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Create offers page</span>
+                <span class="info-box-number">Offers {{$offers->count()}}</span>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('small_title')
 @endsection
 @section('content')
-    <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">Cities</span>
-                <span class="info-box-number">{{$cities->count()}}</span>
-            </div>
-        </div>
-    </div>
+
     <!-- Default box -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -35,11 +35,25 @@
 
         </div>
         <div class="card-body">
-            <x-forms.form class="d-flex flex-column" method="post" action="{{route('cities.store')}}">
+            <x-forms.form class="d-flex flex-column" method="post" action="{{route('offers.store')}}">
                 @csrf
                 @method('POST')
-                <x-forms.input label="City"  type="text" name="name"
-                               placeholder="Enter city name..." />
+                <x-forms.select name="seller_id" label="Restaurant Name">
+                    <option>Select Seller</option>
+                    @foreach($sellers as $seller)
+                        <option {{$seller->id == old('seller_id') ? 'selected' : ''}} value="{{$seller->id}}">{{$seller->restaurant_name}}</option>
+                    @endforeach
+                </x-forms.select>
+                <x-forms.input value="{{old('name')}}" label="Name" type="text" name="name"
+                               placeholder="Enter name..."/>
+                <x-forms.input value="{{old('name')}}" label="Image" type="file" name="image"/>
+                <x-forms.label name="brief_description" label="Brief Description" />
+                <textarea class="rounded-xl bg-white/10 border border-white/10 px-5 py-4 w-full"
+                          name="brief_description"
+                          placeholder="Write a brief one less than 3 lines...">{{$value}}</textarea>
+
+                <x-forms.input value="{{old('start_date')}}" label="Start Date" type="date" name="start_date"/>
+                <x-forms.input value="{{old('end_date')}}" label="End Date" type="date" name="end_date"/>
                 <x-forms.button class="align-items-center mt-3">Create</x-forms.button>
             </x-forms.form>
         </div>

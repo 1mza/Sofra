@@ -1,17 +1,17 @@
 @extends('layouts.admin-app')
-@inject('cities','App\Models\City')
+@inject('commissions','App\Models\Commission')
 @section('breadcrumb')
     <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{url('admin-panel/home')}}">Home</a></li>
-            <li class="breadcrumb-item active"><a href="{{url('admin-panel/cities')}}">Cities</a></li>
-            <li class="breadcrumb-item active"><a href="{{route('cities.create')}}">Create</a></li>
+            <li class="breadcrumb-item active"><a href="{{url('admin-panel/commissions')}}">Commissions</a></li>
+            <li class="breadcrumb-item active"><a href="{{route('commissions.create')}}">Create</a></li>
 
         </ol>
     </div>
 @endsection
 @section('page_title')
-    Create cities page
+    Create commissions page
 @endsection
 
 @section('small_title')
@@ -21,8 +21,8 @@
         <div class="info-box">
             <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Cities</span>
-                <span class="info-box-number">{{$cities->count()}}</span>
+                <span class="info-box-text">commissions</span>
+                <span class="info-box-number">{{$commissions->count()}}</span>
             </div>
         </div>
     </div>
@@ -35,11 +35,19 @@
 
         </div>
         <div class="card-body">
-            <x-forms.form class="d-flex flex-column" method="post" action="{{route('cities.store')}}">
+            <x-forms.form class="d-flex flex-column" method="post" action="{{route('commissions.store')}}">
                 @csrf
                 @method('POST')
-                <x-forms.input label="City"  type="text" name="name"
-                               placeholder="Enter city name..." />
+                <x-forms.select name="seller_id" label="Select Restaurant">
+                    <option disabled selected>Select Restaurant</option>
+                    @foreach($sellers as $seller)
+                        <option {{old('seller_id') == $seller->id ?'selected':''}} value="{{$seller->id}}">{{$seller->restaurant_name}}</option>
+                    @endforeach
+                </x-forms.select>
+                <x-forms.input label="Amount Paid" type="number" name="amount_paid" step="0.5"
+                               placeholder="Enter paid money (LE)..."/>
+                <x-forms.input label="Note" type="text" name="note"
+                               placeholder="Enter note..."/>
                 <x-forms.button class="align-items-center mt-3">Create</x-forms.button>
             </x-forms.form>
         </div>
