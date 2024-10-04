@@ -30,4 +30,11 @@ class Client extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function city() : BelongsTo{
+        return $this->belongsTo(City::class);
+    }
+    public function neighbourhood() : BelongsTo{
+        return $this->belongsTo(Neighbourhood::class);
+    }
+
 }

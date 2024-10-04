@@ -10,7 +10,7 @@
 @section('page_title')
     <div class="w-75">
         <div class="info-box">
-            <span class="info-box-icon w-25 bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
+            <span class="info-box-icon w-25 bg-indigo"><i class="nav-icon fa fa-gift"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">Offers</span>
                 <span class="info-box-number">{{$offers->count()}}</span>
@@ -29,26 +29,22 @@
         <div class="card p-0 sm:p-8 bg-white shadow sm:rounded-lg">
             <div class="card-header d-flex justify-content-between align-items-center col-12">
                 <!-- Title -->
-                <h3 class="card-title mb-0 col-4">
+                <h3 class="card-title mb-0 col-8">
                     List of Offers
                 </h3>
 
                 <!-- Search Form -->
-                <x-forms.form enctype="multipart/form-data" class=" col-4 d-flex align-items-center" action="{{route('offers.index')}}">
-                    <div class="input-group">
-                        <input class="form-control border rounded-start" value="{{request('search')}}" type="text"
-                               name="search" placeholder="Search for an offer...">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
-                    </div>
-                </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('offers.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Offer
-                    </a>
+                <div class="col-4 mx-auto ml-auto d-flex justify-content-center">
+                    <x-forms.form enctype="multipart/form-data" class="d-flex w-100" action="{{route('offers.index')}}">
+                        <div class="input-group w-100">
+                            <input class="form-control border rounded-start" value="{{request('search')}}" type="text"
+                                   name="search" placeholder="Search for an offer...">
+                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                        </div>
+                    </x-forms.form>
                 </div>
-                {{--                @endcan--}}
             </div>
+
             {{--            @include('flash::message')--}}
             @if (session('success'))
                 <div class="alert alert-success">
@@ -77,7 +73,7 @@
                                 <th>{{$loop->iteration}}</th>
                                 <td><a class="row-link"
                                        href="
-{{--                                       {{route('sellers.show',$offer->seller->id)}}--}}
+                                       {{route('sellers.show',$offer->seller->id)}}
                                        ">{{$offer->seller->restaurant_name}}</a></td>
                                 <td>{{$offer->name}}</td>
                                 <td><img style="height: 200px;width: 900px;" src="{{asset($offer->image)}}" alt="offer image"></td>
@@ -87,10 +83,6 @@
 
 
                                 <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('offers.edit',$offer)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
                                     {{--                                        @can('cities-delete')--}}
                                     <form action="{{route('offers.destroy',$offer)}}" method="post"
                                           style="display:inline;">

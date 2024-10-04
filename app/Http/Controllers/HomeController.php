@@ -8,7 +8,9 @@ use App\Models\Client;
 use App\Models\Commission;
 use App\Models\ContactUs;
 use App\Models\Neighbourhood;
+use App\Models\Offer;
 use App\Models\Order;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
@@ -27,6 +29,8 @@ class HomeController extends Controller
         $contacts = ContactUs::count();
         $commissions = Commission::count();
         $orders = Order::latest()->get();
+        $offers = Offer::count();
+        $paymentMethods = PaymentMethod::count();
         $latestBoughtProducts = Product::whereHas('orders', function ($query) use ($orders) {
             $query->whereIn('orders.id', $orders->take(3)->pluck('id'));
         })->get()->unique('id');

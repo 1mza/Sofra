@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Client;
 use App\Http\Controllers\Controller;
 use App\Models\ContactUs;
 use App\Models\Offer;
+use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\SettingsText;
@@ -44,7 +45,13 @@ class ClientController extends Controller
                 'seller_id' => ['required', 'integer', Rule::exists('sellers', 'id')],
                 'notes' => ['nullable', 'string'],
                 'delivery_address' => ['required', 'string'],
-                'payment_method' => ['required', 'string', Rule::in(['cash', 'online'])],
+                'payment_method_id' => ['required', 'integer', Rule::exists('payment_methods', 'id'),
+                    function ($attribute, $value, $fail) {
+                        if (!PaymentMethod::where('id',$value)->where('seller_id',request('seller_id'))->exists()) {
+                            $fail('Payment Method not found for this seller.');
+                        }
+                    }
+                ],
             ]);
             $orderPivotAttribute = request()->validate([
                 'product_id' => ['required', 'array'],
@@ -141,7 +148,7 @@ class ClientController extends Controller
                     'comment' => $attributes['comment'],
                     'rating' => $attributes['rating'],
                 ]);
-                return responseJson(1, "Review Detail", $review??'Please fill one at least.');
+                return responseJson(1, "Review Detail", $review ?? 'Please fill one at least.');
             }
             return responseJson(0, "Review not saved", 'Please fill one at least.');
         } catch (ValidationException $e) {
@@ -149,13 +156,15 @@ class ClientController extends Controller
         }
     }
 
-    public function aboutApp(){
+    public function aboutApp()
+    {
         $aboutApp = SettingsText::select('about_app')->first();
         return responseJson(1, "About App", $aboutApp);
     }
 
-    public function offers(){
-        $offers = Offer::with('seller')->latest()->get()->map(function($offer){
+    public function offers()
+    {
+        $offers = Offer::with('seller')->latest()->get()->map(function ($offer) {
             return [
                 'id' => $offer->id,
                 'restaurant image' => $offer->seller->image,
@@ -165,19 +174,21 @@ class ClientController extends Controller
         return responseJson(1, "Offers retrieved successfully.", $offers);
     }
 
-    public function offerInfo(){
+    public function offerInfo()
+    {
         $offer = Offer::with('seller')->latest()->get();
         return responseJson(1, "Offer retrieved successfully.", $offer);
     }
 
-    public function contactUs(){
+    public function contactUs()
+    {
         try {
             $attributes = request()->validate([
                 'name' => ['required', 'string'],
                 'email' => ['required', 'email'],
                 'phone' => ['required', 'string'],
                 'message' => ['required', 'string'],
-                'type' => ['required', Rule::in(['complaint', 'inquiry','suggestion'])],
+                'type' => ['required', Rule::in(['complaint', 'inquiry', 'suggestion'])],
             ]);
             $contact = ContactUs::create($attributes);
             return responseJson(1, "Contact details added successfully.", $contact);

@@ -22,7 +22,7 @@ class AuthController extends Controller
                 'email' => ['required', 'email', Rule::unique('sellers', 'email')],
                 'phone' => ['required', 'string'],
                 'image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-                'password' => ['required', 'confirmed', Password::min(8)],
+                'password' => ['required','string', 'confirmed', Password::min(8)],
                 'city_id' => ['required', Rule::exists('cities', 'id')],
                 'neighbourhood_id' => ['required', Rule::exists('neighbourhoods', 'id')],
                 'minimum_charge' => ['required', 'integer', 'min:1'],

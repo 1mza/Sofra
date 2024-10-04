@@ -10,21 +10,20 @@
     </div>
 @endsection
 @section('page_title')
-    Edit categories page
-@endsection
+    <div class="w-75">
+        <div class="info-box">
+            <span class="info-box-icon w-25 bg-black"><i class="nav-icon fa fa-list-alt"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Edit categories page</span>
+                <span class="info-box-number">{{$category->name}}</span>
+            </div>
+        </div>
+    </div>@endsection
 
 @section('small_title')
 @endsection
 @section('content')
-    <div class="col-md-3 col-sm-6 col-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">Category</span>
-                <span class="info-box-number">{{$category->name}}</span>
-            </div>
-        </div>
-    </div>
+
     <!-- Default box -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">

@@ -11635,8 +11635,23 @@ body:not(.layout-fixed).layout-navbar-fixed.text-sm .wrapper .main-sidebar .side
 .layout-top-nav .wrapper .main-footer {
   margin-left: 0;
 }
+/* Hide the user panel when the sidebar is collapsed */
+body.sidebar-collapse .user-panel {
+  display: none;
+}
 
-body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper::before,
+/* Shift other sidebar items up to fill the space of the user panel */
+body.sidebar-collapse .sidebar {
+  padding-top: 0 !important; /* Ensure no extra padding at the top */
+}
+
+/* Optional: Adjust the margin or padding of the first item after the user panel */
+body.sidebar-collapse .sidebar-menu > li:first-child {
+  margin-top: 10px; /* Adjust as needed to control the spacing */
+}
+
+
+body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .content-wrapper, body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini):not(.user-panel) .content-wrapper::before,
 body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-footer,
 body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-footer::before,
 body.sidebar-collapse:not(.sidebar-mini-xs):not(.sidebar-mini-md):not(.sidebar-mini) .main-header,

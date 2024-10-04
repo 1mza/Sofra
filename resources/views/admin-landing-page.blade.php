@@ -21,7 +21,7 @@
 
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box bg-dark">
-                <span class="info-box-icon bg-info"><i class="fa fa-server"></i></span>
+                <span class="info-box-icon bg-cyan"><i class="far fa-address-card"></i></span>
                 <div class="info-box-content">
                     <a href="clients">
                         <span class="info-box-text">Clients</span>
@@ -33,7 +33,7 @@
 
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box bg-dark">
-                <span class="info-box-icon bg-info"><i class="fa fa-server"></i></span>
+                <span class="info-box-icon bg-green"><i class="fas fa-address-card"></i></span>
                 <div class="info-box-content">
                     <a href="sellers">
                         <span class="info-box-text">Sellers</span>
@@ -67,7 +67,7 @@
 
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box bg-dark">
-                <span class="info-box-icon bg-green"><i class="fa fa-paper-plane"></i></span>
+                <span class="info-box-icon bg-rose-950"><i class="fa fa-cart-plus"></i></span>
                 <div class="info-box-content">
                     <a href="orders">
                         <span class="info-box-text">Orders</span>
@@ -78,7 +78,7 @@
         </div>
         <div class="col-md-3 col-sm-6 col-12">
             <div class="info-box bg-dark">
-                <span class="info-box-icon bg-yellow"><i class="far fa-clipboard"></i></span>
+                <span class="info-box-icon bg-yellow"><i class="far fa-credit-card"></i></span>
                 <div class="info-box-content">
                     <a href="commissions">
                         <span class="info-box-text">Commissions</span>
@@ -120,6 +120,39 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box bg-dark">
+                <span class="info-box-icon bg-indigo"><i class="fas fa-gift"></i></span>
+                <div class="info-box-content">
+                    <a href="offers">
+                        <span class="info-box-text">Offers</span>
+                        <span class="info-box-number">{{$offers}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box bg-dark">
+                <span class="info-box-icon bg-blue-900"><i class="fab fa-cc-visa"></i></span>
+                <div class="info-box-content">
+                    <a href="payment-methods">
+                        <span class="info-box-text">Payment Methods</span>
+                        <span class="info-box-number">{{$paymentMethods}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-12">
+            <div class="info-box bg-dark text-black">
+                <span class="info-box-icon bg-white"><i class=" text-black fa fa-cogs"></i></span>
+                <div class="info-box-content">
+                    <a href="settings">
+                        <span class="info-box-text">Settings</span>
+{{--                        <span class="info-box-number">{{$paymentMethods}}</span>--}}
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <!-- First Column -->
@@ -133,7 +166,7 @@
                 <span class="float-end"><b>{{$acceptedOrders}}</b>/{{$orders->count()}}</span>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-primary"
-                         style="width: {{$acceptedOrders/$orders->count() * 100}}%"></div>
+                         style="width: {{$orders->count() > 0 ?$acceptedOrders/$orders->count() * 100 : 0}}%"></div>
                 </div>
             </div>
             <!-- /.progress-group -->
@@ -142,7 +175,8 @@
                 Refused Orders
                 <span class="float-end"><b>{{$refusedOrders}}</b>/{{$orders->count()}}</span>
                 <div class="progress progress-sm">
-                    <div class="progress-bar bg-danger" style="width: {{$refusedOrders/$orders->count() * 100}}%"></div>
+                    <div class="progress-bar bg-danger"
+                         style="width: {{$orders->count() > 0 ?$refusedOrders/$orders->count() * 100: 0}}%"></div>
                 </div>
             </div>
             <!-- /.progress-group -->
@@ -152,7 +186,7 @@
                 <span class="float-end"><b>{{$deliveredOrders}}</b>/{{$orders->count()}}</span>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-success"
-                         style="width: {{$deliveredOrders/$orders->count() * 100}}%"></div>
+                         style="width: {{$orders->count() > 0 ? $deliveredOrders/$orders->count() * 100 : 0}}%"></div>
                 </div>
             </div>
             <!-- /.progress-group -->
@@ -162,7 +196,7 @@
                 <span class="float-end"><b>{{$declinedOrders}}</b>/{{$orders->count()}}</span>
                 <div class="progress progress-sm">
                     <div class="progress-bar bg-warning"
-                         style="width: {{$declinedOrders/$orders->count() * 100}}%"></div>
+                         style="width: {{$orders->count() > 0 ? $declinedOrders/$orders->count() * 100: 0}}%"></div>
                 </div>
             </div>
             <!-- /.progress-group -->
@@ -194,7 +228,7 @@
                                          alt="User Image">
                                 </div>
                                 <div>
-                                    <a class="users-list-name" href="#">{{$seller->restaurant_name}}</a>
+                                    <a class="users-list-name" href="{{route('sellers.show',$seller)}}">{{$seller->restaurant_name}}</a>
                                     <span class="users-list-date">{{date($seller->created_at->format('y-m-d'))}}</span>
                                 </div>
                             </li>
@@ -237,7 +271,7 @@
                                     <img src="{{asset($product->image)}}" alt="Product Image" class="img-size-50">
                                 </div>
                                 <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title">{{$product->name}}
+                                    <a href="{{route('products.index')}}" class="product-title">{{$product->name}}
                                         <span class="badge bg-warning float-end">${{$product->price}}</span></a>
                                     <span class="product-description">
                                 {{$product->brief_description}}

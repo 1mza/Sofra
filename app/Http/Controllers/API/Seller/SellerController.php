@@ -28,8 +28,8 @@ class SellerController extends Controller
                 'neighbourhood_id' => ['sometimes', 'integer', Rule::exists('neighbourhoods', 'id')],
                 'minimum_charge' => ['sometimes', 'integer'],
                 'delivery_fees' => ['sometimes', 'integer'],
-                'delivery_phone' => ['sometimes', 'integer'],
-                'delivery_whatsapp' => ['sometimes', 'integer'],
+                'delivery_phone' => ['sometimes', 'string'],
+                'delivery_whatsapp' => ['sometimes', 'string'],
                 'status' => ['sometimes', Rule::in(['open', 'closed'])],
             ]);
             if (isset($attributes['password'])) {

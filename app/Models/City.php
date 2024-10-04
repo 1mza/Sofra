@@ -15,4 +15,13 @@ class City extends Model
     {
         return $this->hasMany(Neighbourhood::class);
     }
+
+    public function sellers(): HasMany
+    {
+        return $this->hasMany(Seller::class);
+    }
+    public function clients(): HasMany
+    {
+        return $this->hasMany(Client::class);
+    }
 }

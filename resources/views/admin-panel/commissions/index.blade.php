@@ -8,23 +8,22 @@
     </div>
 @endsection
 @section('page_title')
-    Commissions
-@endsection
-
-@section('small_title')
-    <br>
-    Index
-@endsection
-@section('content')
-    <div class="col-md-3 col-sm-6 col-12">
+    <div class="w-75">
         <div class="info-box">
-            <span class="info-box-icon bg-blue"><i class="nav-icon fa fa-map-marker"></i></span>
+            <span class="info-box-icon w-25 bg-yellow"><i class="nav-icon fa fa-credit-card"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">Commissions</span>
                 <span class="info-box-number">{{$commissions->count()}}</span>
             </div>
         </div>
     </div>
+@endsection
+
+@section('small_title')
+
+@endsection
+@section('content')
+
     <!-- Default box -->
     <div class="container-fluid p-0">
         <div class="card p-0 sm:p-8 bg-white shadow sm:rounded-lg">

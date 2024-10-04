@@ -8,7 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/font-awesome.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
@@ -18,9 +21,9 @@
     <style>
         /* Adjust the image size and positioning when the sidebar is collapsed */
         .sidebar-mini.sidebar-collapse .user-panel .image img {
-            width: auto;  /* Maintain aspect ratio */
-            height: 40px;  /* Set a fixed height */
-            max-width: 100%;  /* Ensure the image doesn't overflow */
+            width: auto; /* Maintain aspect ratio */
+            height: 40px; /* Set a fixed height */
+            max-width: 100%; /* Ensure the image doesn't overflow */
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -32,7 +35,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding-top: 10px;  /* Add some padding if necessary */
+            padding-top: 10px; /* Add some padding if necessary */
         }
 
 
@@ -52,13 +55,13 @@
                 <a href="{{url('admin-panel/home')}}" class="nav-link">Home</a>
             </li>
             <li class="nav-item d-none d-sm-inline-block">
-                <a href="{{url('admin-panel/contact-us')}}" class="nav-link">Contact US</a>
+                <a href="{{url('admin-panel/contact-links')}}" class="nav-link">Contact US Links</a>
             </li>
         </ul>
 
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
+            <!-- Navbar SearchSearch -->
             <li class="nav-item">
                 <a class="nav-link" data-widget="navbar-search" href="#" role="button">
                     <i class="fas fa-search"></i>
@@ -85,44 +88,34 @@
                     <i class="fas fa-expand-arrows-alt"></i>
                 </a>
             </li>
-{{--            <li class="nav-item">--}}
-{{--                <form action="{{route('logout')}}" method="POST">--}}
-{{--                    @csrf--}}
-{{--                    <button class="nav-link" data-widget="logout" role="button">--}}
-{{--                        <i class="">Logout</i>--}}
-{{--                    </button>--}}
-{{--                </form>--}}
-{{--            </li>--}}
-
         </ul>
     </nav>
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="../../index3.html" class="brand-link">
-            <img src="{{asset('adminlte/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
-                 class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">AdminLTE 3</span>
-        </a>
+        {{--        <!-- Brand Logo -->--}}
+        {{--        <a href="../../index3.html" class="brand-link">--}}
+        {{--            <img src="{{asset('adminlte/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"--}}
+        {{--                 class="brand-image img-circle elevation-3" style="opacity: .8">--}}
+        {{--            <span class="brand-text font-weight-light">AdminLTE 3</span>--}}
+        {{--        </a>--}}
 
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle elevation-2"
-                         alt="User Image">
-                </div>
-                <div class="info">
-                    <a href="profile" class="d-block">{{auth()->user()->name}}</a>
-{{--                    @foreach(auth()->user()->roles->pluck('name') as $role)--}}
-{{--                        <label class="badge badge-light mx-1">{{$role}}</label>--}}
-{{--                    @endforeach--}}
+            <div class="justify-center user-panel  d-flex">
+                <div class="info w-full text-white flex flex-col items-center justify-center mt-2 rounded-md hover:text-white hover:bg-gray-600 transition duration-150 ">
+                    <a href="profile" class="text-center d-block">
+                        {{auth()->user()->name}}
+                        <small class=" d-block">{{auth()->user()->email}}</small>
+                    </a>
+
+                    {{--                    @foreach(auth()->user()->roles->pluck('name') as $role)--}}
+                    {{--                        <label class="badge badge-light mx-1">{{$role}}</label>--}}
+                    {{--                    @endforeach--}}
                 </div>
             </div>
-
 
 
             <!-- Sidebar Menu -->
@@ -133,39 +126,29 @@
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
                     <li>
-                        <!-- SidebarSearch Form -->
-                        <div class="form-inline">
-                            <div class="input-group" data-widget="sidebar-search">
-                                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                                       aria-label="Search">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sidebar">
-                                        <i class="fas fa-search fa-fw"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        @livewire('search')
                     </li>
                     <li class=" nav-item">
-                        <a href="#" class="{{request()->is('admin-panel/posts') || request()->is('admin-panel/categories') ? 'bg-gray-900 text-white' : null}} nav-link">
+                        <a href="#"
+                           class="{{request()->is('admin-panel/clients') || request()->is('admin-panel/sellers') ? 'bg-gray-900 text-white' : null}} nav-link">
                             <i class="  nav-icon fa fa-table"></i>
                             <p>
-                                Posts
+                                Customers
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="{{request()->is('admin-panel/posts') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin-panel/posts')}}" class="nav-link">
-                                    <i class="far fa-clipboard nav-icon"></i>
-                                    <p>Posts</p>
+                            <li class="{{request()->is('admin-panel/sellers') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-panel/sellers')}}" class="nav-link">
+                                    <i class="fas fa-address-card nav-icon"></i>
+                                    <p>Sellers</p>
                                 </a>
                             </li>
                             <li>
-                            <li class="{{request()->is('categories') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin-panel/categories')}}" class="nav-link">
-                                    <i class="nav-icon fa fa-list-alt"></i>
-                                    <p>Categories</p>
+                            <li class="{{request()->is('clients') ? 'bg-gray-900 text-white' : null}}nav-item">
+                                <a href="{{url('admin-panel/clients')}}" class="nav-link">
+                                    <i class="nav-icon far fa-address-card"></i>
+                                    <p>Clients</p>
                                 </a>
                             </li>
                         </ul>
@@ -192,9 +175,21 @@
                             <p>Categories</p>
                         </a>
                     </li>
+                    <li class="{{request()->is('admin-panel/products') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/products')}}" class="nav-link">
+                            <i class="nav-icon fab fa-product-hunt"></i>
+                            <p>Products</p>
+                        </a>
+                    </li>
+                    <li class="{{request()->is('admin-panel/orders') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/orders')}}" class="nav-link">
+                            <i class="nav-icon fa fa-cart-plus"></i>
+                            <p>Orders</p>
+                        </a>
+                    </li>
                     <li class="{{request()->is('admin-panel/offers') ? 'bg-gray-900 text-white' : null}}nav-item">
                         <a href="{{url('admin-panel/offers')}}" class="nav-link">
-                            <i class="nav-icon fa fa-list-alt"></i>
+                            <i class="nav-icon fa fa-gift"></i>
                             <p>Offers</p>
                         </a>
                     </li>
@@ -204,11 +199,15 @@
                             <p>Commissions</p>
                         </a>
                     </li>
-
-
-
+                    <li class="{{request()->is('admin-panel/payment-methods') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/payment-methods')}}" class="nav-link">
+                            <i class="nav-icon 	fab fa-cc-visa"></i>
+                            <p>Payment Methods</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
-                        <a href="#" class="{{request()->is('admin-panel/users') || request()->is('admin-panel/roles') || request()->is('admin-panel/permissions') ? 'bg-gray-900 text-white' : null}} nav-link">
+                        <a href="#"
+                           class="{{request()->is('admin-panel/users') || request()->is('admin-panel/roles') || request()->is('admin-panel/permissions') ? 'bg-gray-900 text-white' : null}} nav-link">
                             <i class="nav-icon fa fa-list"></i>
                             <p>Users</p>
                             <i class="right fas fa-angle-left"></i>
@@ -216,35 +215,35 @@
                         <ul class="nav nav-treeview">
 
                             <li class="{{request()->is('admin-panel/users') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin-anel/users')}}" class="nav-link">
+                                <a href="{{url('admin-panel/users')}}" class="nav-link">
                                     <i class="nav-icon fa fa-users "></i>
-                                    <p>Users Informations</p>
+                                    <p>Users Information's</p>
                                 </a>
                             </li>
                             <li class="{{request()->is('admin-panel/roles') ? 'bg-gray-900 text-white' : null}}nav-item">
-                                <a href="{{url('admin-anel/roles')}}" class="nav-link">
-                                    <i class="nav-icon far fa-user "></i>
+                                <a href="{{url('admin-panel/roles')}}" class="nav-link">
+                                    <i class="nav-icon fab fa-critical-role "></i>
                                     <p>Roles</p>
                                 </a>
                             </li>
                             <li class="{{request()->is('admin-panel/permissions') ? 'bg-gray-900 text-white' : null}}nav-item">
                                 <a href="{{url('admin-panel/permissions')}}" class="nav-link">
-                                    <i class=" nav-icon far fa-address-book"></i>
+                                    <i class=" nav-icon fas fa-eye-slash"></i>
                                     <p>Permissions</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="{{request()->is('admin-panel/contacts') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin-anel/contacts')}}" class="nav-link">
+                        <a href="{{url('admin-panel/contacts')}}" class="nav-link">
                             <i class="nav-icon fas fa-envelope"></i>
                             <p>Contacts</p>
                         </a>
                     </li>
-                    <li class="{{request()->is('admin-panel/contact-us') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin-anel/contact-us')}}" class="nav-link">
+                    <li class="{{request()->is('admin-panel/contact-links') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/contact-links')}}" class="nav-link">
                             <i class="nav-icon fas fa-phone"></i>
-                            <p>Contact Us</p>
+                            <p>Contact Links</p>
                         </a>
                     </li>
                     <li class="{{request()->is('admin-panel/profile') ? 'bg-gray-900 text-white' : null}}nav-item">
@@ -253,9 +252,9 @@
                             <p>Profile</p>
                         </a>
                     </li>
-                    <li class="{{request()->is('admin/settings') ? 'bg-gray-900 text-white' : null}}nav-item">
-                        <a href="{{url('admin/settings')}}" class="nav-link">
-                            <i class="nav-icon fa fa-cog"></i>
+                    <li class="{{request()->is('admin-panel/settings') ? 'bg-gray-900 text-white' : null}}nav-item">
+                        <a href="{{url('admin-panel/settings')}}" class="nav-link">
+                            <i class="nav-icon fa fa-cogs"></i>
                             <p>Settings</p>
                         </a>
                     </li>
