@@ -13,6 +13,10 @@ use Illuminate\Validation\Rules\Password;
 
 class SellerController extends Controller
 {
+
+    public function __construct(){
+        $this->authorizeResource(Seller::class,'client');
+    }
     /**
      * Display a listing of the resource.
      */

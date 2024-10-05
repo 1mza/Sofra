@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('neighbourhoods-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('neighbourhoods.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Neighbourhood
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create locations')
+                    <div class="col-4 text-end">
+                        <a href="{{route('neighbourhoods.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Neighbourhood
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -61,48 +61,49 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('neighbourhoods-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($neighbourhoods as $neighbourhood)
+                    @can('list locations')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$loop->iteration}}</th>
-                                <td><a class="row-link"
-                                       href="{{route('neighbourhoods.show',$neighbourhood)}}">{{$neighbourhood->name}}</a>
-                                </td>
-                                <td><a class="row-link"
-                                       href="{{route('cities.show',$neighbourhood->city->id)}}">{{$neighbourhood->city->name}}</a>
-                                </td>
-
-                                <td>
-                                    {{--                                        @can('neighbourhoods-edit')--}}
-                                    <a href="{{route('neighbourhoods.edit',$neighbourhood)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('neighbourhoods-delete')--}}
-                                    <form action="{{route('neighbourhoods.destroy',$neighbourhood)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($neighbourhoods as $neighbourhood)
+                                <tr>
+                                    <th>{{$loop->iteration}}</th>
+                                    <td><a class="row-link"
+                                           href="{{route('neighbourhoods.show',$neighbourhood)}}">{{$neighbourhood->name}}</a>
+                                    </td>
+                                    <td><a class="row-link"
+                                           href="{{route('cities.show',$neighbourhood->city->id)}}">{{$neighbourhood->city->name}}</a>
+                                    </td>
+
+                                    <td>
+                                        @can('update location')
+                                            <a href="{{route('neighbourhoods.edit',$neighbourhood)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete location')
+                                            <form action="{{route('neighbourhoods.destroy',$neighbourhood)}}"
+                                                  method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$neighbourhoods->links()}}
                 </div>
             </div>

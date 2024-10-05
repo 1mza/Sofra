@@ -6,6 +6,7 @@ use App\Models\City;
 use App\Models\Client;
 use App\Models\Neighbourhood;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -13,6 +14,12 @@ use Illuminate\Validation\Rules\Password;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:viewAny,App\Models\Order')->only('index');
+        $this->middleware('can:view,App\Models\Order')->only('show');
+        $this->middleware('can:delete,App\Models\Order')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      */

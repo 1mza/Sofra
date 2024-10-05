@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('permissions.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Permissions
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create permission')
+                    <div class="col-4 text-end">
+                        <a href="{{route('permissions.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Permissions
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -57,49 +57,49 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Guard</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($permissions as $permission)
+                    @can('list permissions')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$permission->id}}</th>
-                                <td>{{$permission->name}}</td>
-                                <td>{{$permission->guard_name}}</td>
-                                <td>
-                                    @foreach($permission->roles as $role)
-                                        <span>{{$role->name}}</span>{{!$loop->last ? ', ' : ''}}
-                                    @endforeach
-                                </td>
-                                <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('permissions.edit',$permission)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('permissions.destroy',$permission)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Guard</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($permissions as $permission)
+                                <tr>
+                                    <th>{{$permission->id}}</th>
+                                    <td>{{$permission->name}}</td>
+                                    <td>{{$permission->guard_name}}</td>
+                                    <td>
+                                        @foreach($permission->roles as $role)
+                                            <span>{{$role->name}}</span>{{!$loop->last ? ', ' : ''}}
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @can('update permission')
+                                            <a href="{{route('permissions.edit',$permission)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete permission')
+                                            <form action="{{route('permissions.destroy',$permission)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$permissions->links()}}
                 </div>
             </div>

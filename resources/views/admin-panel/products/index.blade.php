@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('products.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Product
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create product')
+                    <div class="col-4 text-end">
+                        <a href="{{route('products.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Product
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -57,55 +57,57 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Seller Name (restaurant)</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Brief Description</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Offer Price</th>
-                            <th scope="col">Preparation Time</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($products as $product)
+                    @can('list products')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$product->id}}</th>
-                                <td><a href="{{route('sellers.show',$product->seller)}}">{{$product->seller->restaurant_name}}</a></td>
-                                <td>{{$product->name}}</td>
-                                <td><img src="{{asset($product->image)}}" style="width: 800px;height: 200px" ></td>
-                                <td>{{$product->brief_description}}</td>
-                                <td>{{$product->price.' LE'}} </td>
-                                <td>{{$product->offer_price !==null ?$product->offer_price.' LE' : 'No Offer'}} </td>
-                                <td>{{$product->preparation_time}}</td>
-                                <td>{{$product->created_at}}</td>
-                                <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('products.edit',$product)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('products.destroy',$product)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">ID</th>
+                                <th scope="col">Seller Name (restaurant)</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Brief Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Offer Price</th>
+                                <th scope="col">Preparation Time</th>
+                                <th scope="col">Created At</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($products as $product)
+                                <tr>
+                                    <th>{{$product->id}}</th>
+                                    <td>
+                                        <a href="{{route('sellers.show',$product->seller)}}">{{$product->seller->restaurant_name}}</a>
+                                    </td>
+                                    <td>{{$product->name}}</td>
+                                    <td><img src="{{asset($product->image)}}" style="width: 800px;height: 200px"></td>
+                                    <td>{{$product->brief_description}}</td>
+                                    <td>{{$product->price.' LE'}} </td>
+                                    <td>{{$product->offer_price !==null ?$product->offer_price.' LE' : 'No Offer'}} </td>
+                                    <td>{{$product->preparation_time}}</td>
+                                    <td>{{$product->created_at}}</td>
+                                    <td>
+                                        @can('update product')
+                                            <a href="{{route('products.edit',$product)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete product')
+                                            <form action="{{route('products.destroy',$product)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$products->links()}}
                 </div>
             </div>

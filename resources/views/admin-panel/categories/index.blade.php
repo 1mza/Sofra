@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('categories.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Category
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('list categories')
+                    <div class="col-4 text-end">
+                        <a href="{{route('categories.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Category
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -61,42 +61,42 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($categories as $category)
+                    @can('list categories')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$loop->iteration}}</th>
-                                <td><a class="row-link"
-                                       href="{{route('categories.show',$category)}}">{{$category->name}}</a></td>
-                                <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('categories.edit',$category)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('categories.destroy',$category)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($categories as $category)
+                                <tr>
+                                    <th>{{$loop->iteration}}</th>
+                                    <td><a class="row-link"
+                                           href="{{route('categories.show',$category)}}">{{$category->name}}</a></td>
+                                    <td>
+                                        @can('update category')
+                                            <a href="{{route('categories.edit',$category)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete category')
+                                            <form action="{{route('categories.destroy',$category)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$categories->links()}}
                 </div>
             </div>

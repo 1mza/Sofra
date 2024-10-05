@@ -9,6 +9,9 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
+    public function __construct(){
+        $this->authorizeResource(Permission::class, 'permission');
+    }
     /**
      * Display a listing of the resource.
      */

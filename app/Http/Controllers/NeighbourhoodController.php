@@ -9,6 +9,11 @@ use Illuminate\Validation\Rule;
 
 class NeighbourhoodController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Neighbourhood::class, 'neighbourhood');
+    }
     /**
      * Display a listing of the resource.
      */

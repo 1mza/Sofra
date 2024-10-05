@@ -10,6 +10,10 @@ use Illuminate\Validation\Rule;
 
 class SettingsTextController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(SettingsText::class, 'setting');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -25,6 +29,25 @@ class SettingsTextController extends Controller
         })->latest()->get();
         return view('admin-panel.settings.index', compact('settings'));
     }
+
+    public function create()
+    {
+        if (SettingsText::count() == 0) {
+            return view('admin-panel.settings.create');
+        } else {
+            abort(404);
+        }
+    }
+
+    public function store(Request $request, SettingsText $setting){
+        $attributes = request()->validate([
+            'about_app' => ['sometimes','string'],
+            'commission_text' => ['sometimes','string'],
+        ]);
+        $setting->create($attributes);
+        return redirect()->route('settings.index');
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -51,9 +74,9 @@ class SettingsTextController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Offer $offer)
+    public function destroy(SettingsText $setting)
     {
-        $offer->delete();
-        return redirect()->route('offers.index')->with('success', "Offer for " . $offer->seller->restaurant_name . " deleted successfully");
+        $setting->delete();
+        return redirect()->route('settings.index')->with('success', "Settings deleted successfully");
     }
 }

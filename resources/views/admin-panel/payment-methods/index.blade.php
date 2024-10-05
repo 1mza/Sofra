@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('payment-methods.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Payment Method
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create payment method')
+                    <div class="col-4 text-end">
+                        <a href="{{route('payment-methods.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Payment Method
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -57,51 +57,52 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Seller Name</th>
-                            <th scope="col">Seller Image</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($paymentMethods as $paymentMethod)
+                    @can('list payment methods')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$loop->iteration}}</th>
-                                <td>
-                                    <a href="{{route('sellers.show',$paymentMethod->seller)}}">{{$paymentMethod->seller->restaurant_name}}</a>
-                                </td>
-                                <td><img src="{{asset($paymentMethod->seller->image)}}" alt="seller image"></td>
-                                <td>
-                                    <a href="{{route('payment-methods.show',$paymentMethod)}}">{{$paymentMethod->name}}</a>
-                                </td>
-                                <td>{{$paymentMethod->description}}</td>
-                                <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('payment-methods.edit',$paymentMethod)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('payment-methods.destroy',$paymentMethod)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Seller Name</th>
+                                <th scope="col">Seller Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($paymentMethods as $paymentMethod)
+                                <tr>
+                                    <th>{{$loop->iteration}}</th>
+                                    <td>
+                                        <a href="{{route('sellers.show',$paymentMethod->seller)}}">{{$paymentMethod->seller->restaurant_name}}</a>
+                                    </td>
+                                    <td><img src="{{asset($paymentMethod->seller->image)}}" alt="seller image"></td>
+                                    <td>
+                                        <a href="{{route('payment-methods.show',$paymentMethod)}}">{{$paymentMethod->name}}</a>
+                                    </td>
+                                    <td>{{$paymentMethod->description}}</td>
+                                    <td>
+                                        @can('update payment method')
+                                            <a href="{{route('payment-methods.edit',$paymentMethod)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete payment method')
+                                            <form action="{{route('payment-methods.destroy',$paymentMethod)}}"
+                                                  method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$paymentMethods->links()}}
                 </div>
             </div>

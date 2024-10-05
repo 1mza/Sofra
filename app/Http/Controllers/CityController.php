@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\City;
+use App\Models\Neighbourhood;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class CityController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(City::class, 'city');
+    }
     /**
      * Display a listing of the resource.
      */

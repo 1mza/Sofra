@@ -35,7 +35,8 @@
 
                 <!-- Search Form -->
                 <div class="col-4 mx-auto ml-auto d-flex justify-content-center">
-                    <x-forms.form enctype="multipart/form-data" class="d-flex w-100" action="{{route('contacts.index')}}">
+                    <x-forms.form enctype="multipart/form-data" class="d-flex w-100"
+                                  action="{{route('contacts.index')}}">
                         <div class="input-group w-100">
                             <input class="form-control border rounded-start" value="{{request('search')}}" type="text"
                                    name="search" placeholder="Search for a contact...">
@@ -53,47 +54,47 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">Message</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Date/Time</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($contacts as $contact)
+                    @can('list contacts')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$loop->iteration}}</th>
-                                <td>{{$contact->name}}</td>
-                                <td>{{$contact->email}}</td>
-                                <td>{{$contact->phone}}</td>
-                                <td>{{$contact->message}}</td>
-                                <td>{{$contact->type}}</td>
-                                <td>{{$contact->created_at}}</td>
-                                <td>
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('contacts.destroy',$contact)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Message</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Date/Time</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($contacts as $contact)
+                                <tr>
+                                    <th>{{$loop->iteration}}</th>
+                                    <td>{{$contact->name}}</td>
+                                    <td>{{$contact->email}}</td>
+                                    <td>{{$contact->phone}}</td>
+                                    <td>{{$contact->message}}</td>
+                                    <td>{{$contact->type}}</td>
+                                    <td>{{$contact->created_at}}</td>
+                                    <td>
+                                        @can('delete contact')
+                                            <form action="{{route('contacts.destroy',$contact)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$contacts->links()}}
                 </div>
             </div>

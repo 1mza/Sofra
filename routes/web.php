@@ -47,7 +47,12 @@ Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
     Route::resource('settings', SettingsTextController::class);
     Route::resource('sellers', SellerController::class);
     Route::resource('clients', ClientController::class);
+
     Route::resource('users', UserController::class);
+
+//    Route::get('/users', [UserController::class, 'index'])->middleware('can:viewAny,App\Models\User');
+
+
     Route::resource('payment-methods', PaymentMethodController::class);
     Route::resource('contact-links', ContactLinkController::class);
     Route::resource('products', ProductController::class);

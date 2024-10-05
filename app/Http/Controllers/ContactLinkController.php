@@ -7,12 +7,16 @@ use http\Encoding\Stream\Inflate;
 
 class ContactLinkController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(ContactLink::class, 'contact_link');
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $contact_links = ContactLink::all(); // Fetches the first record
+        $contact_links = ContactLink::all();
         return view('admin-panel.contact-links.index', compact('contact_links'));
     }
 

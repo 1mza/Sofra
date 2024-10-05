@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('cities-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('roles.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Role
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create role')
+                    <div class="col-4 text-end">
+                        <a href="{{route('roles.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Role
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -57,43 +57,43 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('cities-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Guard</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($roles as $role)
+                    @can('list roles')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$role->id}}</th>
-                                <td>{{$role->name}}</td>
-                                <td>{{$role->guard_name}}</td>
-                                <td>
-                                    {{--                                        @can('cities-edit')--}}
-                                    <a href="{{route('roles.edit',$role)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('cities-delete')--}}
-                                    <form action="{{route('roles.destroy',$role)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Guard</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($roles as $role)
+                                <tr>
+                                    <th>{{$role->id}}</th>
+                                    <td>{{$role->name}}</td>
+                                    <td>{{$role->guard_name}}</td>
+                                    <td>
+                                        @can('update role')
+                                            <a href="{{route('roles.edit',$role)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete role')
+                                            <form action="{{route('roles.destroy',$role)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$roles->links()}}
                 </div>
             </div>

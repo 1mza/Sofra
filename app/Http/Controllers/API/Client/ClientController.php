@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Client;
 
+use App\Events\OrderCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\ContactUs;
 use App\Models\Offer;
@@ -47,7 +48,7 @@ class ClientController extends Controller
                 'delivery_address' => ['required', 'string'],
                 'payment_method_id' => ['required', 'integer', Rule::exists('payment_methods', 'id'),
                     function ($attribute, $value, $fail) {
-                        if (!PaymentMethod::where('id',$value)->where('seller_id',request('seller_id'))->exists()) {
+                        if (!PaymentMethod::where('id', $value)->where('seller_id', request('seller_id'))->exists()) {
                             $fail('Payment Method not found for this seller.');
                         }
                     }
@@ -55,15 +56,21 @@ class ClientController extends Controller
             ]);
             $orderPivotAttribute = request()->validate([
                 'product_id' => ['required', 'array'],
-                'product_id.*' => ['integer', Rule::exists('products', 'id')],
+                'product_id.*' => ['integer', Rule::exists('products', 'id'),
+                    function ($attribute, $value, $fail) {
+                        if (!Product::where('id',$value)->where('seller_id', request('seller_id'))->exists()) {
+                            $fail('Product not found for this seller.');
+                        }
+                    }],
                 'quantity' => ['required', 'array'],
                 'quantity.*' => ['integer'],
                 'special_note' => ['nullable', 'array'],
                 'special_note.*' => ['nullable', 'string'],
             ]);
             $client = auth()->user();
+            $seller = Seller::findOrFail(request('seller_id'));
             $order = $client->orders()->create($orderAttribute);
-
+            OrderCreatedEvent::dispatch($client,$seller);
             foreach ($orderPivotAttribute['product_id'] as $key => $productId) {
                 $product = Product::findOrFail($productId);
                 $order->products()->attach($productId, [

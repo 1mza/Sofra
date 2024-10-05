@@ -18,28 +18,6 @@
     <link rel="stylesheet" href="{{asset('adminlte/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('adminlte/css/adminlte.min.css')}}">
-    <style>
-        /* Adjust the image size and positioning when the sidebar is collapsed */
-        .sidebar-mini.sidebar-collapse .user-panel .image img {
-            width: auto; /* Maintain aspect ratio */
-            height: 40px; /* Set a fixed height */
-            max-width: 100%; /* Ensure the image doesn't overflow */
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Center the user info and badges when the sidebar is collapsed */
-        .sidebar-mini.sidebar-collapse .user-panel .info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding-top: 10px; /* Add some padding if necessary */
-        }
-
-
-    </style>
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -94,28 +72,24 @@
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        {{--        <!-- Brand Logo -->--}}
-        {{--        <a href="../../index3.html" class="brand-link">--}}
-        {{--            <img src="{{asset('adminlte/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"--}}
-        {{--                 class="brand-image img-circle elevation-3" style="opacity: .8">--}}
-        {{--            <span class="brand-text font-weight-light">AdminLTE 3</span>--}}
-        {{--        </a>--}}
-
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user (optional) -->
-            <div class="justify-center user-panel  d-flex">
-                <div class="info w-full text-white flex flex-col items-center justify-center mt-2 rounded-md hover:text-white hover:bg-gray-600 transition duration-150 ">
+            <div class="break-normal justify-center user-panel d-flex">
+                <div class="info w-full text-white flex flex-col items-center justify-center mt-2 rounded-md hover:text-white hover:bg-gray-600 transition duration-150">
                     <a href="profile" class="text-center d-block">
-                        {{auth()->user()->name}}
-                        <small class=" d-block">{{auth()->user()->email}}</small>
-                    </a>
+                        {{ auth()->user()->name }}
+                        <small class="d-block">{{ auth()->user()->email }}</small>
+                        @foreach(auth()->user()->roles->pluck('name') as $role)
+                            <label class="break-normal badge badge-light role-badge" title="{{ $role }}">{{ $role }}</label>
+                        @endforeach
 
-                    {{--                    @foreach(auth()->user()->roles->pluck('name') as $role)--}}
-                    {{--                        <label class="badge badge-light mx-1">{{$role}}</label>--}}
-                    {{--                    @endforeach--}}
+                    </a>
                 </div>
             </div>
+
+
+
 
 
             <!-- Sidebar Menu -->

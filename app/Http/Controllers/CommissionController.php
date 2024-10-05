@@ -9,6 +9,10 @@ use Illuminate\Validation\Rule;
 
 class CommissionController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Commission::class, 'commission');
+    }
     /**
      * Display a listing of the resource.
      */

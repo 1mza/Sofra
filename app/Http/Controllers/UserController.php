@@ -11,11 +11,18 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class, 'user');
+//        $this->middleware('can:viewAny,App\Models\User');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
         $users = User::when(request()->has('search'), function ($query) {
             $filteredColumns = ['name', 'email'];
             $query->where(function ($query) use ($filteredColumns) {
@@ -33,7 +40,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('admin-panel.users.create',compact('roles'));
+        return view('admin-panel.users.create', compact('roles'));
     }
 
     /**

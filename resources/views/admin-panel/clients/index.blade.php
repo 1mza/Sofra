@@ -41,13 +41,13 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                {{--                @can('clients-create')--}}
-                <div class="col-4 text-end">
-                    <a href="{{route('clients.create')}}" class="ml-auto btn btn-primary ms-3">
-                        Add New Client
-                    </a>
-                </div>
-                {{--                @endcan--}}
+                @can('create client')
+                    <div class="col-4 text-end">
+                        <a href="{{route('clients.create')}}" class="ml-auto btn btn-primary ms-3">
+                            Add New Client
+                        </a>
+                    </div>
+                @endcan
             </div>
             {{--            @include('flash::message')--}}
             @if (session('success'))
@@ -57,51 +57,52 @@
             @endif
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    {{--                    @can('clients-lists')--}}
-                    <table class="table table-bordered table-hover w-100 m-0">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Neighbourhood</th>
-                            <th scope="col">Date/Time</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($clients as $client)
+                    @can('list clients')
+                        <table class="table table-bordered table-hover w-100 m-0">
+                            <thead>
                             <tr>
-                                <th>{{$loop->iteration}}</th>
-                                <td><a class="row-link"
-                                       href="{{route('clients.show',$client)}}">{{$client->name}}</a></td>                                <td>{{$client->email}}</td>
-                                <td>{{$client->phone}}</td>
-                                <td>{{$client->city->name}}</td>
-                                <td>{{$client->neighbourhood->name}}</td>
-                                <td>{{$client->created_at}}</td>
-                                <td>
-                                    {{--                                        @can('clients-edit')--}}
-                                    <a href="{{route('clients.edit',$client)}}"
-                                       class="btn btn-warning">Edit</a>
-                                    {{--                                        @endcan--}}
-                                    {{--                                        @can('clients-delete')--}}
-                                    <form action="{{route('clients.destroy',$client)}}" method="post"
-                                          style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Are you sure?')"
-                                                class="btn btn-danger">Delete
-                                        </button>
-                                    </form>
-                                    {{--                                        @endcan--}}
-                                </td>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Neighbourhood</th>
+                                <th scope="col">Date/Time</th>
+                                <th scope="col">Actions</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    {{--                    @endcan--}}
+                            </thead>
+                            <tbody>
+                            @foreach($clients as $client)
+                                <tr>
+                                    <th>{{$loop->iteration}}</th>
+                                    <td><a class="row-link"
+                                           href="{{route('clients.show',$client)}}">{{$client->name}}</a></td>
+                                    <td>{{$client->email}}</td>
+                                    <td>{{$client->phone}}</td>
+                                    <td>{{$client->city->name}}</td>
+                                    <td>{{$client->neighbourhood->name}}</td>
+                                    <td>{{$client->created_at}}</td>
+                                    <td>
+                                        @can('update client')
+                                            <a href="{{route('clients.edit',$client)}}"
+                                               class="btn btn-warning">Edit</a>
+                                        @endcan
+                                        @can('delete clients')
+                                            <form action="{{route('clients.destroy',$client)}}" method="post"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure?')"
+                                                        class="btn btn-danger">Delete
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endcan
                     {{$clients->links()}}
                 </div>
             </div>
