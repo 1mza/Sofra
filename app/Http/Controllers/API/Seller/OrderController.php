@@ -13,7 +13,9 @@ class OrderController extends Controller
     public function newOrders()
     {
         if (auth()->check()) {
-            $orders = Order::where('order_status', 'pending')->with('products')->get()
+            $orders = Order::where('order_status', 'pending')
+                ->where('seller_id', auth()->user()->id)->with('products', 'client')
+                ->get()
                 ->map(function ($order) {
                     return [
                         'client_name' => $order->client->name,
@@ -22,16 +24,24 @@ class OrderController extends Controller
                         'delivery_address' => $order->delivery_address,
                     ];
                 });
-            if (request()->has(['order_id']) || request()->has(['action'])) {
+            if (request()->has(['order_id']) && request()->has(['action'])) {
                 try {
                     request()->validate([
-                        'order_id' => ['required', Rule::exists('orders', 'id')],
+                        'order_id' => ['required', Rule::exists('orders', 'id'),
+                            function ($attribute, $value, $fail) {
+                                if (!Order::where('id', $value)
+                                    ->where('seller_id', auth()->user()->id)
+                                    ->where('order_status', 'pending')
+                                    ->exists()) {
+                                    $fail('Order not found.');
+                                }
+                            }],
                         'action' => ['required', Rule::in(['accepted', 'refused'])],
                     ]);
                     $order = Order::find(request()->order_id);
                     $order->update(['order_status' => request()->action]);
 
-                    return responseJson(1, "Order status changed successfully.", $order);
+                    return responseJson(1, "Order status changed successfully.", $order->load('client','products'));
                 } catch (ValidationException $e) {
                     return responseJson(0, $e->getMessage(), $e->errors());
                 }
@@ -44,7 +54,9 @@ class OrderController extends Controller
     public function currentOrders()
     {
         if (auth()->check()) {
-            $orders = Order::where('order_status', 'accepted')->with('products')->get()
+            $orders = Order::where('order_status', 'accepted')
+                ->where('seller_id', auth()->user()->id)->with('products', 'client')
+                ->get()
                 ->map(function ($order) {
                     return [
                         'client_name' => $order->client->name,
@@ -53,19 +65,22 @@ class OrderController extends Controller
                         'delivery_address' => $order->delivery_address,
                     ];
                 });
-            if (request()->has(['order_id']) || request()->has(['action'])) {
+            if (request()->has(['order_id']) && request()->has(['action'])) {
                 try {
                     request()->validate([
-                        'order_id' => ['required', Rule::exists('orders', 'id')],
-                        'action' => ['required', Rule::in(['delivered'])],
+                        'order_id' => ['required', Rule::exists('orders', 'id'),
+                            function ($attribute, $value, $fail) {
+                                if (!Order::where('order_status', 'accepted')
+                                    ->where('seller_id', auth()->user()->id)
+                                    ->where('id', $value)->exists()) {
+                                    $fail('Order not found.');
+                                }
+                            }],
+                        'action' => ['required', Rule::in(['delivered'])]
                     ]);
                     $order = Order::find(request()->order_id);
-                    if ($order->order_status == 'accepted') {
-                        $order->update(['order_status' => request()->action]);
-                        return responseJson(1, "Order status changed successfully.", $order);
-                    } else {
-                        return responseJson(0, "Only accepted orders can change to delivered.", $order);
-                    }
+                    $order->update(['order_status' => request()->action]);
+                    return responseJson(1, "Order status changed successfully.", $order->load('client','products'));
 
                 } catch (ValidationException $e) {
                     return responseJson(0, $e->getMessage(), $e->errors());
@@ -79,7 +94,9 @@ class OrderController extends Controller
     public function PastOrders()
     {
         if (auth()->check()) {
-            $orders = Order::whereIn('order_status', ['delivered','refused','declined'])->with('products')->get()
+            $orders = Order::whereIn('order_status', ['delivered', 'refused', 'declined'])
+                ->where('seller_id', auth()->user()->id)->with('products', 'client')
+                ->get()
                 ->map(function ($order) {
                     return [
                         'client_name' => $order->client->name,
