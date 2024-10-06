@@ -48,7 +48,9 @@ class ClientController extends Controller
                 'delivery_address' => ['required', 'string'],
                 'payment_method_id' => ['required', 'integer', Rule::exists('payment_methods', 'id'),
                     function ($attribute, $value, $fail) {
-                        if (!PaymentMethod::where('id', $value)->where('seller_id', request('seller_id'))->exists()) {
+                        if (!PaymentMethod::where('id', $value)
+                            ->where('seller_id', request('seller_id'))
+                            ->exists()) {
                             $fail('Payment Method not found for this seller.');
                         }
                     }
@@ -58,7 +60,9 @@ class ClientController extends Controller
                 'product_id' => ['required', 'array'],
                 'product_id.*' => ['integer', Rule::exists('products', 'id'),
                     function ($attribute, $value, $fail) {
-                        if (!Product::where('id',$value)->where('seller_id', request('seller_id'))->exists()) {
+                        if (!Product::where('id', $value)
+                            ->where('seller_id', request('seller_id'))
+                            ->exists()) {
                             $fail('Product not found for this seller.');
                         }
                     }],
@@ -69,8 +73,17 @@ class ClientController extends Controller
             ]);
             $client = auth()->user();
             $seller = Seller::findOrFail(request('seller_id'));
+            $productsPrice = 0;
+            foreach ($orderPivotAttribute['product_id'] as $key => $productId) {
+                $product = Product::findOrFail($productId);
+                $productsPrice += $orderPivotAttribute['quantity'][$key] * $product->price;
+            }
+            if ($productsPrice < $seller->minimum_charge) {
+                return responseJson(0, 'Total price is less than the seller minimum charge.');
+            }
             $order = $client->orders()->create($orderAttribute);
-            OrderCreatedEvent::dispatch($client,$seller);
+
+
             foreach ($orderPivotAttribute['product_id'] as $key => $productId) {
                 $product = Product::findOrFail($productId);
                 $order->products()->attach($productId, [
@@ -79,9 +92,12 @@ class ClientController extends Controller
                     'price' => $product->price * $orderPivotAttribute['quantity'][$key],
                 ]);
             }
-            $totalPrice = $order->products()->sum('order_product.price');
+            $totalPrice = $order->products()->sum('order_product.price') + $seller->delivery_fees;
             $order->update(['total' => $totalPrice]);
+            OrderCreatedEvent::dispatch($client, $seller);
+
             return responseJson(1, 'Order created successfully', $order->load('products'));
+
 
         } catch (ValidationException $e) {
             return responseJson(0, $e->getMessage(), $e->errors());

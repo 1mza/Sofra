@@ -15,7 +15,7 @@ class SellerController extends Controller
 {
 
     public function __construct(){
-        $this->authorizeResource(Seller::class,'client');
+        $this->authorizeResource(Seller::class,'seller');
     }
     /**
      * Display a listing of the resource.

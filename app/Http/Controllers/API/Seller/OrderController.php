@@ -54,8 +54,9 @@ class OrderController extends Controller
     public function currentOrders()
     {
         if (auth()->check()) {
+            $seller=auth()->user();
             $orders = Order::where('order_status', 'accepted')
-                ->where('seller_id', auth()->user()->id)->with('products', 'client')
+                ->where('seller_id', $seller->id)->with('products', 'client')
                 ->get()
                 ->map(function ($order) {
                     return [
@@ -69,9 +70,9 @@ class OrderController extends Controller
                 try {
                     request()->validate([
                         'order_id' => ['required', Rule::exists('orders', 'id'),
-                            function ($attribute, $value, $fail) {
+                            function ($attribute, $value, $fail) use ($seller) {
                                 if (!Order::where('order_status', 'accepted')
-                                    ->where('seller_id', auth()->user()->id)
+                                    ->where('seller_id', $seller->id)
                                     ->where('id', $value)->exists()) {
                                     $fail('Order not found.');
                                 }
@@ -80,6 +81,8 @@ class OrderController extends Controller
                     ]);
                     $order = Order::find(request()->order_id);
                     $order->update(['order_status' => request()->action]);
+                    $seller->restaurant_sales += $order->total;
+                    $seller->save();
                     return responseJson(1, "Order status changed successfully.", $order->load('client','products'));
 
                 } catch (ValidationException $e) {

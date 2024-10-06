@@ -18,6 +18,13 @@ class Seller extends Model
 
     protected $guarded = [];
 
+    protected static function booted(): void
+    {
+        static::saving(function($seller){
+            $seller->app_commissions = $seller->restaurant_sales * 0.1;
+        });
+    }
+
     public function categories() :BelongsToMany{
         return $this->belongsToMany(Category::class);
     }
