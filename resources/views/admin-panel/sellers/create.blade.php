@@ -15,7 +15,7 @@
         <div class="info-box">
             <span class="info-box-icon w-25 bg-green"><i class="nav-icon fas fa-address-card"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Create cities page</span>
+                <span class="info-box-text">Create sellers page</span>
                 <span class="info-box-number">{{$sellers->count()}}</span>
             </div>
         </div>
@@ -42,20 +42,20 @@
                 <x-forms.input value="{{old('email')}}" label="Email" type="email" name="email" placeholder="Enter email"/>
                 <x-forms.input value="{{old('phone')}}" label="Phone" type="text" name="phone" placeholder="Enter phone..."/>
                 <x-forms.input label="Image" type="file" name="image"/>
-                <x-forms.input label="Password" type="password" name="password"/>
-                <x-forms.input label="Password Confirmation" type="password" name="password_confirmation"/>
-                <x-forms.select label="City" name="city_id">
-                    <option selected disabled>Select City</option>
-                    @foreach($cities as $city)
-                        <option {{old('city_id')==$city->id ? 'selected':''}} value="{{$city->id}}">{{$city->name}}</option>
-                    @endforeach
-                </x-forms.select>
-                <x-forms.select label="Neighbourhood" name="neighbourhood_id">
-                    <option selected disabled>Select Neighbourhood</option>
-                    @foreach($neighbourhoods as $neighbourhood)
-                        <option {{old('neighbourhood_id')==$neighbourhood->id ? 'selected':''}} value="{{$neighbourhood->id}}">{{$neighbourhood->name}}</option>
-                    @endforeach
-                </x-forms.select>
+                @livewire('password-checker')
+                @livewire('city-neighbourhood')
+{{--                <x-forms.select label="City" name="city_id">--}}
+{{--                    <option selected disabled>Select City</option>--}}
+{{--                    @foreach($cities as $city)--}}
+{{--                        <option {{old('city_id')==$city->id ? 'selected':''}} value="{{$city->id}}">{{$city->name}}</option>--}}
+{{--                    @endforeach--}}
+{{--                </x-forms.select>--}}
+{{--                <x-forms.select label="Neighbourhood" name="neighbourhood_id">--}}
+{{--                    <option selected disabled>Select Neighbourhood</option>--}}
+{{--                    @foreach($neighbourhoods as $neighbourhood)--}}
+{{--                        <option {{old('neighbourhood_id')==$neighbourhood->id ? 'selected':''}} value="{{$neighbourhood->id}}">{{$neighbourhood->name}}</option>--}}
+{{--                    @endforeach--}}
+{{--                </x-forms.select>--}}
                 <label>Category</label>
                 @foreach($categories as $category)
                     <x-forms.checkbox

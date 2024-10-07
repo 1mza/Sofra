@@ -26,11 +26,11 @@ Route::group([], function () {
     });
 });
 
-
+Route::get('/admin-panel', function () {
+    return view('welcome');
+});
 Route::group(['prefix' => 'admin-panel', 'middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+
     Route::get('/home', [HomeController::class, 'home'])->name('home');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

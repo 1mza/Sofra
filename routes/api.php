@@ -31,7 +31,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/restaurants/{seller}/reviews', [App\Http\Controllers\API\Client\ClientController::class, 'restaurantReviews']);
         Route::get('/about-app', [App\Http\Controllers\API\Client\ClientController::class, 'aboutApp']);
         Route::get('/offers', [App\Http\Controllers\API\Client\ClientController::class, 'offers']);
-        Route::get('/offers/{offer}', [App\Http\Controllers\API\Client\ClientController::class, 'offerInfo']);
+        Route::get('/offers/{id}', [App\Http\Controllers\API\Client\ClientController::class, 'offerInfo']);
         Route::post('/contact-us', [App\Http\Controllers\API\Client\ClientController::class, 'contactUs']);
 
         Route::group(['middleware' => 'auth:api-clients'], function () {

@@ -191,7 +191,7 @@
             </div>
             <!-- /.progress-group -->
 
-            <div class="progress-group">
+            <div class="progress-group mb-4">
                 Declined Orders
                 <span class="float-end"><b>{{$declinedOrders}}</b>/{{$orders->count()}}</span>
                 <div class="progress progress-sm">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Client;
 
 use App\Events\OrderCreatedEvent;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\ContactUs;
 use App\Models\Offer;
 use App\Models\PaymentMethod;
@@ -71,7 +72,7 @@ class ClientController extends Controller
                 'special_note' => ['nullable', 'array'],
                 'special_note.*' => ['nullable', 'string'],
             ]);
-            $client = auth()->user();
+            $client = Client::findOrFail(auth()->user()->id);
             $seller = Seller::findOrFail(request('seller_id'));
             $productsPrice = 0;
             foreach ($orderPivotAttribute['product_id'] as $key => $productId) {
@@ -94,7 +95,9 @@ class ClientController extends Controller
             }
             $totalPrice = $order->products()->sum('order_product.price') + $seller->delivery_fees;
             $order->update(['total' => $totalPrice]);
-            OrderCreatedEvent::dispatch($client, $seller);
+//            event(new OrderCreatedEvent($client, $seller));
+
+            OrderCreatedEvent::dispatch($client, $seller, $order);
 
             return responseJson(1, 'Order created successfully', $order->load('products'));
 
@@ -165,11 +168,11 @@ class ClientController extends Controller
                 'comment' => ['nullable', 'string'],
             ]);
             $client = auth()->user();
-            if (request()->filled('comment') || request()->filled('review')) {
+            if (request()->filled('comment') || request()->filled('rating')) {
                 $review = $client->reviews()->create([
                     'seller_id' => $seller->id,
-                    'comment' => $attributes['comment'],
-                    'rating' => $attributes['rating'],
+                    'comment' => $attributes['comment'] ?? null,
+                    'rating' => $attributes['rating'] ?? null,
                 ]);
                 return responseJson(1, "Review Detail", $review ?? 'Please fill one at least.');
             }
@@ -197,10 +200,14 @@ class ClientController extends Controller
         return responseJson(1, "Offers retrieved successfully.", $offers);
     }
 
-    public function offerInfo()
+    public function offerInfo(string $id)
     {
-        $offer = Offer::with('seller')->latest()->get();
-        return responseJson(1, "Offer retrieved successfully.", $offer);
+        $offer = Offer::with('seller')->findOrFail($id);
+        return response()->json([
+            'status' => 1,
+            'message' => 'Offer retrieved successfully.',
+            'data' => $offer,
+        ]);
     }
 
     public function contactUs()

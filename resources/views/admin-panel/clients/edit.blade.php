@@ -40,8 +40,7 @@
                                placeholder="Enter client name..."/>
                 <x-forms.input value="{{$client->email}}" label="Email" type="email" name="email" placeholder="Enter email"/>
                 <x-forms.input value="{{$client->phone}}" label="Phone" type="text" name="phone" placeholder="Enter phone..."/>
-                <x-forms.input label="Password" type="password" name="password"/>
-                <x-forms.input label="Password Confirmation" type="password" name="password_confirmation"/>
+                @livewire('password-checker')
                 <x-forms.select label="City" name="city_id">
                     <option selected disabled>Select City</option>
                     @foreach($cities as $city)

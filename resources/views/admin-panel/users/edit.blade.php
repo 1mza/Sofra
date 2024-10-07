@@ -40,7 +40,6 @@
                                placeholder="Enter client name..."/>
                 <x-forms.input value="{{$user->email}}" label="Email" type="email" name="email"
                                placeholder="Enter email"/>
-
                 <x-forms.checkbox id="selectAllCheckbox" name="role" label="Check All" onClick="toggle(this)"/>
                 @foreach($roles as $role)
                     <x-forms.checkbox
@@ -48,9 +47,7 @@
                             class="checkboxes" name="role[]" label="{{$role->name}}"
                             value="{{$role->name}}"/>
                 @endforeach
-
-                <x-forms.input label="Password" type="password" name="password"/>
-                <x-forms.input label="Password Confirmation" type="password" name="password_confirmation"/>
+                @livewire('password-checker')
                 <x-forms.button class="align-items-center mt-3">Save</x-forms.button>
             </x-forms.form>
 

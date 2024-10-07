@@ -42,14 +42,7 @@
                 <x-forms.input value="{{$seller->phone}}" label="Phone" type="text" name="phone" placeholder="Enter phone..."/>
                 <img style="width: 900px;height: 400px" src="{{asset($seller->image)}}">
                 <x-forms.input label="Image" type="file" name="image"/>
-                <label>Password</label>
-                <input class="rounded-xl bg-white/10 border border-white/10 px-5 py-4 w-full" type="password" name="password" >
-                <x-forms.error name='password'></x-forms.error>
-
-                <label>Password Confirmation</label>
-                <input class="rounded-xl bg-white/10 border border-white/10 px-5 py-4 w-full" type="password" name="password_confirmation" >
-                <x-forms.error name='password_confirmation'></x-forms.error>
-
+                @livewire('password-checker')
                 <x-forms.select label="City" name="city_id">
                     <option selected disabled>Select City</option>
                     @foreach($cities as $city)

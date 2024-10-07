@@ -18,7 +18,7 @@ use Livewire\Component;
         if (strlen($this->search) >= 1) {
             $users = User::where('name', 'like', '%' . $this->search . '%')
                 ->Orwhere('email', 'like', '%' . $this->search . '%')
-                ->limit(2)
+                ->limit(5)
                 ->get()
                 ->map(function ($user) {
                     return [
@@ -30,7 +30,7 @@ use Livewire\Component;
                 });
             $sellers = Seller::where('restaurant_name', 'like', '%' . $this->search . '%')
                 ->Orwhere('email', 'like', '%' . $this->search . '%')
-                ->limit(2)
+                ->limit(5)
                 ->get()
                 ->map(function ($seller) {
                     return [
@@ -42,7 +42,7 @@ use Livewire\Component;
                 });
             $clients = Client::where('name', 'like', '%' . $this->search . '%')
                 ->Orwhere('email', 'like', '%' . $this->search . '%')
-                ->limit(2)
+                ->limit(5)
                 ->get()
                 ->map(function ($client) {
                     return [

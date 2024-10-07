@@ -25,8 +25,8 @@ class OrderEmailListener
      */
     public function handle(OrderCreatedEvent $event): void
     {
-        SendOrderCreatedEmail::dispatch($event->client)->afterCommit();
-        SendOrderCreatedEmail::dispatch($event->seller)->afterCommit();
+        SendOrderCreatedEmail::dispatch($event->client , $event->seller , $event->order)->afterCommit();
+//        SendOrderCreatedEmail::dispatch($event->seller)->afterCommit();
 //        $event->client->notify(new OrderCreatedNotification());
 //        $event->seller->notify(new NewOrderNotification());
     }

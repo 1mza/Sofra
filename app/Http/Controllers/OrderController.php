@@ -38,7 +38,7 @@ class OrderController extends Controller
             })->orWhereHas('paymentMethod', function ($query) {
                 $query->where('name', 'LIKE', '%' . request('search') . '%');
             });
-        })->with(['client','seller','products'])->latest()->simplePaginate(10);
+        })->with(['client','seller','products','paymentMethod'])->latest()->simplePaginate(10);
         return view('admin-panel.orders.index', compact('orders'));
     }
     /**

@@ -41,8 +41,7 @@
                                placeholder="Enter username..."/>
                 <x-forms.input value="{{old('email')}}" label="Email" type="email" name="email"
                                placeholder="Enter email"/>
-                <x-forms.input label="Password" type="password" name="password"/>
-                <x-forms.input label="Password Confirmation" type="password" name="password_confirmation"/>
+                @livewire('password-checker')
                 <x-forms.checkbox id="selectAllCheckbox" name="role" label="Check All" onClick="toggle(this)"/>
                 @foreach($roles as $role)
                     <x-forms.checkbox

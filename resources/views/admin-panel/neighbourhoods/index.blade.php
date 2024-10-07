@@ -41,7 +41,7 @@
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </div>
                 </x-forms.form>
-                @can('create locations')
+                @can('create location')
                     <div class="col-4 text-end">
                         <a href="{{route('neighbourhoods.create')}}" class="ml-auto btn btn-primary ms-3">
                             Add New Neighbourhood

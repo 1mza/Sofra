@@ -32,7 +32,7 @@ class HomeController extends Controller
         $offers = Offer::count();
         $paymentMethods = PaymentMethod::count();
         $latestBoughtProducts = Product::whereHas('orders', function ($query) use ($orders) {
-            $query->whereIn('orders.id', $orders->take(3)->pluck('id'));
+            $query->whereIn('orders.id', $orders->take(10)->pluck('id'));
         })->get()->unique('id');
         $acceptedOrders = Order::where('order_status','accepted')->count();
         $refusedOrders = Order::where('order_status','refused')->count();

@@ -21,7 +21,7 @@ class OrderCreatedEvent
     /**
      * Create a new event instance.
      */
-    public function __construct(public Client $client, public Seller $seller)
+    public function __construct(public Client $client, public Seller $seller, public Order $order)
     {
         //
     }
